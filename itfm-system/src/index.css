@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+:root {
+  --enterprise-blue: #1e40af;
+  --enterprise-blue-light: #3b82f6;
+  --enterprise-blue-dark: #1e3a8a;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #f8fafc;
+  margin: 0;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Stepper styles */
+.stepper-line {
+  transition: all 0.3s ease;
+}
+
+/* Card hover effects */
+.ticket-card {
+  transition: all 0.2s ease;
+}
+
+.ticket-card:hover {
+  transform: translateY(-2px);
+}
