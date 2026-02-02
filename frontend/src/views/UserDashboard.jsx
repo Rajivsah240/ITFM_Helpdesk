@@ -53,7 +53,7 @@ export default function UserDashboard({ activeView }) {
     fetchTickets();
   }, []);
 
-  const myTickets = getTicketsByUser(user?._id);
+  const myTickets = getTicketsByUser(user?.id || user?._id);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

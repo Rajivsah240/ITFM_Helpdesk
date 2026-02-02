@@ -7,6 +7,10 @@ exports.register = async (req, res, next) => {
   try {
     const { name, email, password, department, phone, role } = req.body;
 
+    // Only allow 'user' or 'engineer' roles during registration (not admin)
+    const allowedRoles = ['user', 'engineer'];
+    const userRole = allowedRoles.includes(role) ? role : 'user';
+
     // Generate employee ID
     const employeeId = await User.generateEmployeeId();
 
@@ -18,7 +22,7 @@ exports.register = async (req, res, next) => {
       password,
       department,
       phone,
-      role: role || 'user' // Default to user if not specified
+      role: userRole
     });
 
     sendTokenResponse(user, 201, res);

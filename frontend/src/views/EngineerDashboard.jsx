@@ -47,8 +47,8 @@ export default function EngineerDashboard() {
     getEngineers();
   }, []);
 
-  const myTickets = getTicketsByEngineer(user?._id);
-  const otherEngineers = engineers.filter(e => e._id !== user?._id);
+  const myTickets = getTicketsByEngineer(user?.id || user?._id);
+  const otherEngineers = engineers.filter(e => e._id !== (user?.id || user?._id));
 
   const formatDate = (dateString) => {
     if (!dateString) return '-';

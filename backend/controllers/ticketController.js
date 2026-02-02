@@ -106,7 +106,7 @@ exports.createTicket = async (req, res, next) => {
 
     // Create notification for admins
     await Notification.create({
-      type: 'new',
+      type: 'new_ticket',
       title: 'New Ticket Raised',
       message: `Ticket ${ticket.ticketId} raised by ${req.user.name}`,
       ticket: ticket._id,
@@ -169,7 +169,7 @@ exports.assignTicket = async (req, res, next) => {
 
     // Create notification for engineer
     await Notification.create({
-      type: 'assignment',
+      type: 'assigned',
       title: 'New Ticket Assigned',
       message: `Ticket ${ticket.ticketId} has been assigned to you`,
       ticket: ticket._id,
@@ -178,7 +178,7 @@ exports.assignTicket = async (req, res, next) => {
 
     // Notify ticket raiser
     await Notification.create({
-      type: 'update',
+      type: 'action_update',
       title: 'Ticket Assigned',
       message: `Your ticket ${ticket.ticketId} has been assigned to ${engineer.name}`,
       ticket: ticket._id,
@@ -248,7 +248,7 @@ exports.updateStatus = async (req, res, next) => {
 
     // Notify ticket raiser
     await Notification.create({
-      type: status === 'resolved' ? 'resolution' : 'update',
+      type: status === 'resolved' ? 'resolved' : 'action_update',
       title: status === 'resolved' ? 'Ticket Resolved' : 'Ticket Updated',
       message: `Your ticket ${ticket.ticketId} status is now: ${status}`,
       ticket: ticket._id,
@@ -372,7 +372,7 @@ exports.requestReassign = async (req, res, next) => {
 
     // Notify admin
     await Notification.create({
-      type: 'reassignment',
+      type: 'reassign_request',
       title: 'Reassignment Request',
       message: `${req.user.name} requested reassignment for ticket ${ticket.ticketId}`,
       ticket: ticket._id,
@@ -435,7 +435,7 @@ exports.handleReassignRequest = async (req, res, next) => {
 
       // Notify new engineer
       await Notification.create({
-        type: 'assignment',
+        type: 'reassigned',
         title: 'Ticket Reassigned to You',
         message: `Ticket ${ticket.ticketId} has been reassigned to you`,
         ticket: ticket._id,
@@ -444,7 +444,7 @@ exports.handleReassignRequest = async (req, res, next) => {
 
       // Notify previous engineer
       await Notification.create({
-        type: 'update',
+        type: 'action_update',
         title: 'Reassignment Approved',
         message: `Your reassignment request for ${ticket.ticketId} was approved`,
         ticket: ticket._id,
@@ -461,7 +461,7 @@ exports.handleReassignRequest = async (req, res, next) => {
 
       // Notify engineer
       await Notification.create({
-        type: 'update',
+        type: 'action_update',
         title: 'Reassignment Rejected',
         message: `Your reassignment request for ${ticket.ticketId} was rejected`,
         ticket: ticket._id,

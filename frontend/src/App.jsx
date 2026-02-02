@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { TicketProvider, useTickets } from './context/TicketContext';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
@@ -17,8 +18,7 @@ function Dashboard() {
   const { isDark, toggleTheme } = useTheme();
   const [activeView, setActiveView] = useState('');
   const [showNotifications, setShowNotifications] = useState(false);
-
-  const unreadCount = getUnreadCount(user.id, user.role);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   // Set default view based on role
   useEffect(() => {
@@ -31,6 +31,18 @@ function Dashboard() {
       setActiveView(defaultViews[user.role] || 'dashboard');
     }
   }, [user]);
+
+  // Fetch unread count
+  useEffect(() => {
+    const fetchUnreadCount = async () => {
+      const count = await getUnreadCount();
+      setUnreadCount(count);
+    };
+    fetchUnreadCount();
+    // Refresh every 30 seconds
+    const interval = setInterval(fetchUnreadCount, 30000);
+    return () => clearInterval(interval);
+  }, [getUnreadCount]);
 
   const getPageTitle = () => {
     const titles = {
@@ -141,6 +153,28 @@ function App() {
     <ThemeProvider>
       <AuthProvider>
         <TicketProvider>
+          <Toaster 
+            position="top-right"
+            toastOptions={{
+              duration: 3000,
+              style: {
+                background: '#1e293b',
+                color: '#f1f5f9',
+              },
+              success: {
+                iconTheme: {
+                  primary: '#22c55e',
+                  secondary: '#f1f5f9',
+                },
+              },
+              error: {
+                iconTheme: {
+                  primary: '#ef4444',
+                  secondary: '#f1f5f9',
+                },
+              },
+            }}
+          />
           <AuthWrapper>
             <Dashboard />
           </AuthWrapper>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import {
   LogIn,
@@ -23,6 +24,7 @@ export default function AuthWrapper({ children }) {
     name: '',
     department: '',
     phone: '',
+    role: 'user',
   });
   const [error, setError] = useState('');
 
@@ -48,10 +50,12 @@ export default function AuthWrapper({ children }) {
         const result = await login(formData.email, formData.password);
         if (!result.success) {
           setError(result.error);
+        } else {
+          toast.success('Login successful! Redirecting...');
         }
       } else {
-        if (!formData.name || !formData.email || !formData.password || !formData.department) {
-          setError('Name, email, password, and department are required');
+        if (!formData.name || !formData.email || !formData.password || !formData.department || !formData.role) {
+          setError('Name, email, password, department, and role are required');
           setIsSubmitting(false);
           return;
         }
@@ -61,9 +65,12 @@ export default function AuthWrapper({ children }) {
           password: formData.password,
           department: formData.department,
           phone: formData.phone,
+          role: formData.role,
         });
         if (!result.success) {
           setError(result.error);
+        } else {
+          toast.success('Registration successful! Welcome!');
         }
       }
     } catch (err) {
@@ -200,6 +207,39 @@ export default function AuthWrapper({ children }) {
                         placeholder="+1234567890"
                         className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-800/20 focus:border-blue-800 outline-none transition-all bg-white dark:bg-slate-700 dark:text-white"
                       />
+                    </div>
+                  </div>
+
+                  {/* Role Selection */}
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                      Register as
+                    </label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, role: 'user' })}
+                        className={`flex items-center justify-center gap-2 p-3 rounded-lg border-2 transition-all ${
+                          formData.role === 'user'
+                            ? 'border-blue-800 bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400'
+                            : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 text-slate-600 dark:text-slate-400'
+                        }`}
+                      >
+                        <User className="w-5 h-5" />
+                        <span className="font-medium">User</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, role: 'engineer' })}
+                        className={`flex items-center justify-center gap-2 p-3 rounded-lg border-2 transition-all ${
+                          formData.role === 'engineer'
+                            ? 'border-blue-800 bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400'
+                            : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 text-slate-600 dark:text-slate-400'
+                        }`}
+                      >
+                        <BadgeCheck className="w-5 h-5" />
+                        <span className="font-medium">Engineer</span>
+                      </button>
                     </div>
                   </div>
                 </motion.div>

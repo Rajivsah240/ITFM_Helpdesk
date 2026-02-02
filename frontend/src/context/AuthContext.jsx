@@ -40,8 +40,10 @@ export function AuthProvider({ children }) {
       
       if (response.success) {
         localStorage.setItem('token', response.token);
-        localStorage.setItem('user', JSON.stringify(response.data));
-        setUser(response.data);
+        // Backend returns 'user' not 'data'
+        const userData = response.user || response.data;
+        localStorage.setItem('user', JSON.stringify(userData));
+        setUser(userData);
         return { success: true };
       }
       return { success: false, error: 'Login failed' };
@@ -58,8 +60,10 @@ export function AuthProvider({ children }) {
       if (response.success) {
         // Auto-login after registration
         localStorage.setItem('token', response.token);
-        localStorage.setItem('user', JSON.stringify(response.data));
-        setUser(response.data);
+        // Backend returns 'user' not 'data'
+        const user = response.user || response.data;
+        localStorage.setItem('user', JSON.stringify(user));
+        setUser(user);
         return { success: true };
       }
       return { success: false, error: 'Registration failed' };
