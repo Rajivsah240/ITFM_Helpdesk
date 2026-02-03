@@ -315,12 +315,12 @@ export default function AuthWrapper({ children }) {
                   <>
                     <p><span className="font-medium">Email:</span> admin@itfm.local</p>
                     <p><span className="font-medium">Password:</span> admin123</p>
-                    <p className="mt-2 text-slate-400 dark:text-slate-500">
+                    {/* <p className="mt-2 text-slate-400 dark:text-slate-500">
                       Run `npm run seed` in backend to create admin user
-                    </p>
+                    </p> */}
                   </>
                 ) : (
-                  <p>New users are registered with "User" role. Admin can update roles later.</p>
+                  <p>Admin role account cannot be created without permission.</p>
                 )}
               </div>
             </div>
