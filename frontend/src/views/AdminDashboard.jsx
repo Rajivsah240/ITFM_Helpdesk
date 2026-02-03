@@ -378,6 +378,7 @@ export default function AdminDashboard({ activeView }) {
     if (result.success) {
       setSelectedTicket(null);
       fetchTickets();
+      loadWorkload(); // Refresh workload after assignment
     }
   };
 
@@ -386,6 +387,7 @@ export default function AdminDashboard({ activeView }) {
     if (result.success) {
       setReassignTicket(null);
       fetchTickets();
+      loadWorkload(); // Refresh workload after reassignment
     }
   };
 
