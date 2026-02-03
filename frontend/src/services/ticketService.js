@@ -37,17 +37,16 @@ export const addActionLog = async (ticketId, action, details) => {
 };
 
 // Request ticket reassignment
-export const requestReassign = async (ticketId, engineerId, reason) => {
+export const requestReassign = async (ticketId, reason) => {
   const response = await api.post(`/tickets/${ticketId}/reassign-request`, {
-    engineerId,
     reason
   });
   return response.data;
 };
 
-// Handle reassignment request (admin)
-export const handleReassignRequest = async (ticketId, action) => {
-  const response = await api.put(`/tickets/${ticketId}/reassign-request`, { action });
+// Handle reassignment request (admin - assign to new engineer)
+export const handleReassignRequest = async (ticketId, action, engineerId) => {
+  const response = await api.put(`/tickets/${ticketId}/reassign-request`, { action, engineerId });
   return response.data;
 };
 

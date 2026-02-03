@@ -24,6 +24,7 @@ exports.getTickets = async (req, res, next) => {
     const tickets = await query
       .populate('raisedBy', 'name employeeId department')
       .populate('assignedTo', 'name employeeId')
+      .populate('reassignRequest.requestedBy', 'name employeeId')
       .populate('reassignRequest.requestedTo', 'name employeeId')
       .sort({ createdAt: -1 });
 
@@ -317,7 +318,14 @@ exports.addActionLog = async (req, res, next) => {
 // @access  Private/Engineer
 exports.requestReassign = async (req, res, next) => {
   try {
-    const { engineerId, reason } = req.body;
+    const { reason } = req.body;
+
+    if (!reason || !reason.trim()) {
+      return res.status(400).json({
+        success: false,
+        error: 'Please provide a reason for reassignment'
+      });
+    }
 
     const ticket = await Ticket.findById(req.params.id);
 
@@ -336,23 +344,9 @@ exports.requestReassign = async (req, res, next) => {
       });
     }
 
-    const newEngineer = await User.findOne({
-      _id: engineerId,
-      role: 'engineer',
-      isActive: true
-    });
-
-    if (!newEngineer) {
-      return res.status(404).json({
-        success: false,
-        error: 'Requested engineer not found'
-      });
-    }
-
     ticket.reassignRequest = {
       requested: true,
       requestedBy: req.user._id,
-      requestedTo: newEngineer._id,
       reason,
       status: 'pending',
       requestedAt: new Date()
@@ -361,14 +355,13 @@ exports.requestReassign = async (req, res, next) => {
     ticket.actionLogs.push({
       action: 'Reassignment requested',
       performedBy: req.user._id,
-      details: `Requested reassignment to ${newEngineer.name}`
+      details: `Reason: ${reason}`
     });
 
     await ticket.save();
 
     await ticket.populate('raisedBy', 'name employeeId department');
     await ticket.populate('assignedTo', 'name employeeId');
-    await ticket.populate('reassignRequest.requestedTo', 'name employeeId');
 
     // Notify admin
     await Notification.create({
@@ -393,7 +386,7 @@ exports.requestReassign = async (req, res, next) => {
 // @access  Private/Admin
 exports.handleReassignRequest = async (req, res, next) => {
   try {
-    const { action } = req.body; // 'approve' or 'reject'
+    const { action, engineerId } = req.body; // 'approve' or 'reject', engineerId required for approve
 
     if (!['approve', 'reject'].includes(action)) {
       return res.status(400).json({
@@ -402,9 +395,15 @@ exports.handleReassignRequest = async (req, res, next) => {
       });
     }
 
+    if (action === 'approve' && !engineerId) {
+      return res.status(400).json({
+        success: false,
+        error: 'Please select an engineer to reassign to'
+      });
+    }
+
     const ticket = await Ticket.findById(req.params.id)
-      .populate('assignedTo', 'name employeeId')
-      .populate('reassignRequest.requestedTo', 'name employeeId');
+      .populate('assignedTo', 'name employeeId');
 
     if (!ticket) {
       return res.status(404).json({
@@ -421,9 +420,22 @@ exports.handleReassignRequest = async (req, res, next) => {
     }
 
     const previousEngineer = ticket.assignedTo;
-    const newEngineer = ticket.reassignRequest.requestedTo;
 
     if (action === 'approve') {
+      // Get the new engineer selected by admin
+      const newEngineer = await User.findOne({
+        _id: engineerId,
+        role: 'engineer',
+        isActive: true
+      });
+
+      if (!newEngineer) {
+        return res.status(404).json({
+          success: false,
+          error: 'Selected engineer not found'
+        });
+      }
+
       ticket.assignedTo = newEngineer._id;
       ticket.reassignRequest.status = 'approved';
 

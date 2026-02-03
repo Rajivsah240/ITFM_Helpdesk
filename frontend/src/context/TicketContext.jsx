@@ -112,10 +112,10 @@ export function TicketProvider({ children }) {
     return updateStatus(ticketId, 'resolved');
   };
 
-  // Request reassignment
-  const requestReassign = async (ticketId, engineerId, reason) => {
+  // Request reassignment (only reason required, admin will assign)
+  const requestReassign = async (ticketId, reason) => {
     try {
-      const response = await ticketService.requestReassign(ticketId, engineerId, reason);
+      const response = await ticketService.requestReassign(ticketId, reason);
       if (response.success) {
         setTickets(prev =>
           prev.map(t => (t._id === ticketId ? response.data : t))
@@ -129,10 +129,10 @@ export function TicketProvider({ children }) {
     }
   };
 
-  // Handle reassignment request
-  const handleReassign = async (ticketId, action) => {
+  // Handle reassignment request (admin approves/rejects)
+  const handleReassign = async (ticketId, action, engineerId = null) => {
     try {
-      const response = await ticketService.handleReassignRequest(ticketId, action);
+      const response = await ticketService.handleReassignRequest(ticketId, action, engineerId);
       if (response.success) {
         setTickets(prev =>
           prev.map(t => (t._id === ticketId ? response.data : t))
@@ -235,7 +235,7 @@ export function TicketProvider({ children }) {
 
   const getReassignRequests = () => {
     return tickets.filter(
-      ticket => ticket.reassignRequest?.requested && ticket.reassignRequest?.status === 'pending'
+      ticket => ticket.reassignRequest?.requested === true && ticket.reassignRequest?.status === 'pending'
     );
   };
 

@@ -18,7 +18,6 @@ import {
   CheckCircle,
   RefreshCw,
   X,
-  Users,
 } from 'lucide-react';
 
 const severityConfig = {
@@ -35,20 +34,17 @@ const statusConfig = {
 
 export default function EngineerDashboard() {
   const { tickets, loading, fetchTickets, getTicketsByEngineer, addActionLog, resolveTicket, requestReassign } = useTickets();
-  const { user, getEngineers, engineers } = useAuth();
+  const { user } = useAuth();
   const { isDark } = useTheme();
   const [expandedTicket, setExpandedTicket] = useState(null);
   const [showReassignModal, setShowReassignModal] = useState(null);
   const [reassignReason, setReassignReason] = useState('');
-  const [selectedEngineer, setSelectedEngineer] = useState('');
 
   useEffect(() => {
     fetchTickets();
-    getEngineers();
   }, []);
 
   const myTickets = getTicketsByEngineer(user?.id || user?._id);
-  const otherEngineers = engineers.filter(e => e._id !== (user?.id || user?._id));
 
   const formatDate = (dateString) => {
     if (!dateString) return '-';
@@ -82,15 +78,10 @@ export default function EngineerDashboard() {
       alert('Please provide a reason for reassignment');
       return;
     }
-    if (!selectedEngineer) {
-      alert('Please select an engineer');
-      return;
-    }
-    const result = await requestReassign(ticketId, selectedEngineer, reassignReason);
+    const result = await requestReassign(ticketId, reassignReason);
     if (result.success) {
       setShowReassignModal(null);
       setReassignReason('');
-      setSelectedEngineer('');
       fetchTickets();
     } else {
       alert(result.error);
@@ -313,30 +304,6 @@ export default function EngineerDashboard() {
             <div className="p-6 space-y-4">
               <div>
                 <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                  Select Engineer to Reassign To *
-                </label>
-                <div className="relative">
-                  <Users className={`absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 ${isDark ? 'text-slate-400' : 'text-slate-400'}`} />
-                  <select
-                    value={selectedEngineer}
-                    onChange={(e) => setSelectedEngineer(e.target.value)}
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-800/20 focus:border-blue-800 outline-none transition-all appearance-none ${
-                      isDark 
-                        ? 'bg-slate-700 border-slate-600 text-white' 
-                        : 'bg-white border-slate-200 text-slate-800'
-                    }`}
-                  >
-                    <option value="">Select an engineer...</option>
-                    {otherEngineers.map((engineer) => (
-                      <option key={engineer._id} value={engineer._id}>
-                        {engineer.name} - {engineer.department}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div>
-                <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
                   Reason for Reassignment *
                 </label>
                 <textarea
@@ -350,6 +317,9 @@ export default function EngineerDashboard() {
                       : 'bg-white border-slate-200 text-slate-800'
                   }`}
                 />
+                <p className={`text-xs mt-2 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                  Admin will review your request and assign to another engineer.
+                </p>
               </div>
               <div className="flex gap-3">
                 <button
@@ -362,7 +332,6 @@ export default function EngineerDashboard() {
                   onClick={() => {
                     setShowReassignModal(null);
                     setReassignReason('');
-                    setSelectedEngineer('');
                   }}
                   className={`px-6 py-2.5 font-medium rounded-lg transition-colors ${
                     isDark 

@@ -39,6 +39,13 @@ export default function AdminDashboard({ activeView }) {
     loadWorkload();
   }, []);
 
+  // Refresh data when view changes to reassignments
+  useEffect(() => {
+    if (activeView === 'reassignments') {
+      fetchTickets();
+    }
+  }, [activeView]);
+
   const loadEngineers = async () => {
     await getEngineers();
   };
@@ -382,8 +389,8 @@ export default function AdminDashboard({ activeView }) {
     }
   };
 
-  const handleReassignTicket = async (ticketId, action) => {
-    const result = await handleReassign(ticketId, action);
+  const handleReassignTicket = async (ticketId, action, engineerId = null) => {
+    const result = await handleReassign(ticketId, action, engineerId);
     if (result.success) {
       setReassignTicket(null);
       fetchTickets();
@@ -413,7 +420,7 @@ export default function AdminDashboard({ activeView }) {
           {activeView === 'unassigned' && renderUnassigned()}
           {activeView === 'active' && renderActive()}
           {activeView === 'workload' && renderWorkload()}
-          {activeView === 'reassign' && renderReassignments()}
+          {activeView === 'reassignments' && renderReassignments()}
         </motion.div>
       </AnimatePresence>
 
@@ -433,7 +440,7 @@ export default function AdminDashboard({ activeView }) {
           ticket={reassignTicket}
           engineers={engineers.filter(e => e._id !== reassignTicket.assignedTo?._id)}
           onAssign={(ticketId, engineerId) => {
-            handleReassignTicket(ticketId, 'approve');
+            handleReassignTicket(ticketId, 'approve', engineerId);
           }}
           onClose={() => setReassignTicket(null)}
           title="Reassign Ticket"
