@@ -38,9 +38,9 @@ export default function Sidebar({ activeView, setActiveView }) {
   const { isDark } = useTheme();
   const items = menuItems[user.role] || [];
   
-  // Calculate reassign requests count from tickets
+  // Calculate reassign requests count from tickets (only pending ones)
   const reassignCount = user.role === 'admin' 
-    ? tickets.filter(t => t.reassignRequest?.requested).length 
+    ? tickets.filter(t => t.reassignRequest?.requested && t.reassignRequest?.status === 'pending').length 
     : 0;
 
   return (
