@@ -14,8 +14,13 @@ exports.getTickets = async (req, res, next) => {
       // Admin sees all tickets
       query = Ticket.find();
     } else if (req.user.role === 'engineer') {
-      // Engineer sees assigned tickets
-      query = Ticket.find({ assignedTo: req.user._id });
+      // Engineer sees assigned tickets OR tickets where they requested reassignment
+      query = Ticket.find({
+        $or: [
+          { assignedTo: req.user._id },
+          { 'reassignRequest.requestedBy': req.user._id }
+        ]
+      });
     } else {
       // User sees their own tickets
       query = Ticket.find({ raisedBy: req.user._id });

@@ -30,21 +30,28 @@ const severityConfig = {
 const statusConfig = {
   assigned: { label: 'Assigned', color: 'bg-blue-100 text-blue-700', darkColor: 'bg-blue-900/50 text-blue-300' },
   'in-progress': { label: 'In Progress', color: 'bg-purple-100 text-purple-700', darkColor: 'bg-purple-900/50 text-purple-300' },
+  resolved: { label: 'Resolved', color: 'bg-green-100 text-green-700', darkColor: 'bg-green-900/50 text-green-300' },
 };
 
 export default function EngineerDashboard() {
-  const { tickets, loading, fetchTickets, getTicketsByEngineer, addActionLog, resolveTicket, requestReassign } = useTickets();
+  const { tickets, loading, fetchTickets, getTicketsByEngineer, getEngineerTicketHistory, addActionLog, resolveTicket, requestReassign } = useTickets();
   const { user } = useAuth();
   const { isDark } = useTheme();
   const [expandedTicket, setExpandedTicket] = useState(null);
   const [showReassignModal, setShowReassignModal] = useState(null);
   const [reassignReason, setReassignReason] = useState('');
+  const [showHistory, setShowHistory] = useState(false);
 
   useEffect(() => {
     fetchTickets();
   }, []);
 
   const myTickets = getTicketsByEngineer(user?.id || user?._id);
+  const ticketHistory = getEngineerTicketHistory(user?.id || user?._id);
+  
+  // Separate counts for resolved and reassignment requested
+  const resolvedCount = ticketHistory.filter(t => t.assignedTo?._id === (user?.id || user?._id) && t.status === 'resolved').length;
+  const reassignRequestedCount = ticketHistory.filter(t => t.reassignRequest?.requestedBy?._id === (user?.id || user?._id) && t.reassignRequest?.requested).length;
 
   const formatDate = (dateString) => {
     if (!dateString) return '-';
@@ -96,7 +103,7 @@ export default function EngineerDashboard() {
     );
   }
 
-  if (myTickets.length === 0) {
+  if (myTickets.length === 0 && ticketHistory.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16">
         <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-4 ${isDark ? 'bg-green-900/30' : 'bg-green-100'}`}>
@@ -111,17 +118,101 @@ export default function EngineerDashboard() {
   return (
     <>
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-slate-800'}`}>My Assigned Tickets</h2>
-          <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Tickets requiring your attention</p>
+      {/* Stats Summary */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className={`rounded-xl border p-4 ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
+          <div className="flex items-center gap-3">
+            <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isDark ? 'bg-blue-900/50' : 'bg-blue-100'}`}>
+              <Wrench className={`w-5 h-5 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
+            </div>
+            <div>
+              <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-slate-800'}`}>{myTickets.length}</p>
+              <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Active</p>
+            </div>
+          </div>
         </div>
-        <span className={`px-3 py-1.5 text-sm font-medium rounded-lg ${isDark ? 'bg-blue-900/50 text-blue-300' : 'bg-blue-100 text-blue-700'}`}>
-          {myTickets.length} tickets
-        </span>
+        <div className={`rounded-xl border p-4 ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
+          <div className="flex items-center gap-3">
+            <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isDark ? 'bg-green-900/50' : 'bg-green-100'}`}>
+              <CheckCircle className={`w-5 h-5 ${isDark ? 'text-green-400' : 'text-green-600'}`} />
+            </div>
+            <div>
+              <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-slate-800'}`}>{resolvedCount}</p>
+              <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Resolved</p>
+            </div>
+          </div>
+        </div>
+        <div className={`rounded-xl border p-4 ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
+          <div className="flex items-center gap-3">
+            <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isDark ? 'bg-orange-900/50' : 'bg-orange-100'}`}>
+              <RefreshCw className={`w-5 h-5 ${isDark ? 'text-orange-400' : 'text-orange-600'}`} />
+            </div>
+            <div>
+              <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-slate-800'}`}>{reassignRequestedCount}</p>
+              <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Reassign Req.</p>
+            </div>
+          </div>
+        </div>
+        <div className={`rounded-xl border p-4 ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
+          <div className="flex items-center gap-3">
+            <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isDark ? 'bg-purple-900/50' : 'bg-purple-100'}`}>
+              <Clock className={`w-5 h-5 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
+            </div>
+            <div>
+              <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-slate-800'}`}>{myTickets.length + ticketHistory.length}</p>
+              <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Total</p>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="space-y-4">
+      {/* Toggle Tabs */}
+      <div className={`flex gap-2 p-1 rounded-lg ${isDark ? 'bg-slate-800' : 'bg-slate-100'}`}>
+        <button
+          onClick={() => setShowHistory(false)}
+          className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+            !showHistory
+              ? 'bg-blue-800 text-white'
+              : isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-800'
+          }`}
+        >
+          Active Tickets ({myTickets.length})
+        </button>
+        <button
+          onClick={() => setShowHistory(true)}
+          className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+            showHistory
+              ? 'bg-blue-800 text-white'
+              : isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-800'
+          }`}
+        >
+          History ({ticketHistory.length})
+        </button>
+      </div>
+
+      {/* Active Tickets Section */}
+      {!showHistory && (
+        <>
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-slate-800'}`}>My Assigned Tickets</h2>
+              <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Tickets requiring your attention</p>
+            </div>
+            <span className={`px-3 py-1.5 text-sm font-medium rounded-lg ${isDark ? 'bg-blue-900/50 text-blue-300' : 'bg-blue-100 text-blue-700'}`}>
+              {myTickets.length} tickets
+            </span>
+          </div>
+
+          {myTickets.length === 0 ? (
+            <div className={`rounded-xl border p-12 text-center ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
+              <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${isDark ? 'bg-green-900/30' : 'bg-green-100'}`}>
+                <CheckCircle className={`w-8 h-8 ${isDark ? 'text-green-400' : 'text-green-600'}`} />
+              </div>
+              <h3 className={`font-semibold mb-2 ${isDark ? 'text-white' : 'text-slate-800'}`}>No Active Tickets</h3>
+              <p className={isDark ? 'text-slate-400' : 'text-slate-500'}>You have no tickets requiring your attention right now.</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
         {myTickets.map((ticket) => {
           const isExpanded = expandedTicket === ticket._id;
           const severity = severityConfig[ticket.severity];
@@ -269,7 +360,117 @@ export default function EngineerDashboard() {
             </motion.div>
           );
         })}
-      </div>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* History Section */}
+      {showHistory && (
+        <>
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-slate-800'}`}>Ticket History</h2>
+              <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Previously assigned tickets (resolved or reassigned)</p>
+            </div>
+            <span className={`px-3 py-1.5 text-sm font-medium rounded-lg ${isDark ? 'bg-green-900/50 text-green-300' : 'bg-green-100 text-green-700'}`}>
+              {ticketHistory.length} tickets
+            </span>
+          </div>
+
+          {ticketHistory.length === 0 ? (
+            <div className={`rounded-xl border p-12 text-center ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
+              <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${isDark ? 'bg-slate-700' : 'bg-slate-100'}`}>
+                <Clock className={`w-8 h-8 ${isDark ? 'text-slate-400' : 'text-slate-400'}`} />
+              </div>
+              <h3 className={`font-semibold mb-2 ${isDark ? 'text-white' : 'text-slate-800'}`}>No History Yet</h3>
+              <p className={isDark ? 'text-slate-400' : 'text-slate-500'}>You haven't resolved or reassigned any tickets yet.</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {ticketHistory.map((ticket) => {
+                const hasReassignRequest = ticket.reassignRequest?.requestedBy?._id === (user?.id || user?._id) && ticket.reassignRequest?.requested;
+                const wasResolved = ticket.status === 'resolved' && ticket.assignedTo?._id === (user?.id || user?._id);
+                const reassignStatus = ticket.reassignRequest?.status;
+                
+                // Determine badge style based on reassign status
+                const getReassignBadgeStyle = () => {
+                  if (reassignStatus === 'approved') return isDark ? 'bg-green-900/50 text-green-300' : 'bg-green-100 text-green-700';
+                  if (reassignStatus === 'rejected') return isDark ? 'bg-red-900/50 text-red-300' : 'bg-red-100 text-red-700';
+                  return isDark ? 'bg-yellow-900/50 text-yellow-300' : 'bg-yellow-100 text-yellow-700'; // pending
+                };
+                
+                const getReassignLabel = () => {
+                  if (reassignStatus === 'approved') return 'Reassigned';
+                  if (reassignStatus === 'rejected') return 'Reassign Rejected';
+                  return 'Reassign Pending';
+                };
+                
+                return (
+                  <motion.div
+                    key={ticket._id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`rounded-xl border overflow-hidden ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}
+                  >
+                    <div className="p-4">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-2 flex-wrap">
+                            <span className={`px-2.5 py-1 text-xs font-bold rounded ${
+                              statusConfig[ticket.priority]?.color || 'bg-slate-100 text-slate-600'
+                            }`}>
+                              {ticket.priority?.toUpperCase()}
+                            </span>
+                            {wasResolved ? (
+                              <span className={`px-2.5 py-1 text-xs font-medium rounded-full ${
+                                isDark ? 'bg-green-900/50 text-green-300' : 'bg-green-100 text-green-700'
+                              }`}>
+                                Resolved
+                              </span>
+                            ) : hasReassignRequest && (
+                              <span className={`px-2.5 py-1 text-xs font-medium rounded-full ${getReassignBadgeStyle()}`}>
+                                {getReassignLabel()}
+                              </span>
+                            )}
+                            <span className={`text-xs ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+                              {ticket.ticketId}
+                            </span>
+                          </div>
+                          <p className={`font-medium ${isDark ? 'text-white' : 'text-slate-800'}`}>{ticket.problemDescription}</p>
+                          <div className={`flex items-center gap-4 mt-2 text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                            <span className="flex items-center gap-1">
+                              <Monitor className="w-4 h-4" />
+                              {ticket.assetId}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <MapPin className="w-4 h-4" />
+                              {ticket.location}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="text-right shrink-0">
+                          <p className={`text-xs ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+                            {wasResolved ? 'Resolved on' : hasReassignRequest ? 'Requested on' : 'Updated on'}
+                          </p>
+                          <p className={`text-sm font-medium ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                            {formatDate(wasResolved ? ticket.updatedAt : ticket.reassignRequest?.requestedAt || ticket.updatedAt)}
+                          </p>
+                          {hasReassignRequest && ticket.reassignRequest?.reason && (
+                            <p className={`text-xs mt-1 max-w-[150px] truncate ${isDark ? 'text-orange-400/70' : 'text-orange-600/70'}`}>
+                              Reason: {ticket.reassignRequest.reason}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          )}
+        </>
+      )}
     </div>
     
     {/* Reassign Modal */}

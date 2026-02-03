@@ -223,6 +223,17 @@ export function TicketProvider({ children }) {
     );
   };
 
+  // Get engineer's ticket history (resolved or reassignment requested tickets)
+  const getEngineerTicketHistory = (engineerId) => {
+    return tickets.filter(
+      ticket => 
+        // Tickets resolved by this engineer
+        (ticket.assignedTo?._id === engineerId && ticket.status === 'resolved') ||
+        // Tickets where this engineer requested reassignment (any status)
+        (ticket.reassignRequest?.requestedBy?._id === engineerId && ticket.reassignRequest?.requested)
+    );
+  };
+
   const getUnassignedTickets = () => {
     return tickets.filter(ticket => ticket.status === 'open');
   };
@@ -264,6 +275,7 @@ export function TicketProvider({ children }) {
         clearNotifications,
         getTicketsByUser,
         getTicketsByEngineer,
+        getEngineerTicketHistory,
         getUnassignedTickets,
         getActiveTickets,
         getReassignRequests,
