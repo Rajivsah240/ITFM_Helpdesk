@@ -59,12 +59,12 @@ function Dashboard() {
   };
 
   return (
-    <div className={`flex min-h-screen ${isDark ? 'dark bg-slate-900' : 'bg-slate-50'}`}>
+    <div className={`flex min-h-screen ${isDark ? 'dark bg-dark-bg' : 'bg-slate-50'}`}>
       <Sidebar activeView={activeView} setActiveView={setActiveView} />
       
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <header className={`${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'} border-b px-6 py-4`}>
+        <header className={`${isDark ? 'bg-dark-card border-dark-border' : 'bg-white border-slate-200'} border-b px-6 py-4`}>
           <div className="flex items-center justify-between">
             <div>
               <motion.h1
@@ -86,9 +86,9 @@ function Dashboard() {
                 <input
                   type="text"
                   placeholder="Search..."
-                  className={`pl-10 pr-4 py-2 w-64 border rounded-lg text-sm focus:ring-2 focus:ring-blue-800/20 focus:border-blue-800 outline-none transition-all ${
+                  className={`pl-10 pr-4 py-2 w-64 border rounded-lg text-sm focus:ring-2 focus:ring-blue-800/20 dark:focus:ring-blue-500/30 focus:border-blue-800 dark:focus:border-blue-500 outline-none transition-all ${
                     isDark 
-                      ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400' 
+                      ? 'bg-dark-input border-dark-border text-white placeholder-slate-400' 
                       : 'bg-white border-slate-200 text-slate-800'
                   }`}
                 />
@@ -98,7 +98,7 @@ function Dashboard() {
               <button
                 onClick={toggleTheme}
                 className={`p-2 rounded-lg transition-colors ${
-                  isDark ? 'hover:bg-slate-700 text-slate-400' : 'hover:bg-slate-100 text-slate-600'
+                  isDark ? 'hover:bg-dark-hover text-slate-400' : 'hover:bg-slate-100 text-slate-600'
                 }`}
               >
                 {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
@@ -110,7 +110,7 @@ function Dashboard() {
                   <button 
                     onClick={() => setShowNotifications(!showNotifications)}
                     className={`relative p-2 rounded-lg transition-colors ${
-                      isDark ? 'hover:bg-slate-700' : 'hover:bg-slate-100'
+                      isDark ? 'hover:bg-dark-hover' : 'hover:bg-slate-100'
                     }`}
                   >
                     <Bell className={`w-5 h-5 ${isDark ? 'text-slate-400' : 'text-slate-600'}`} />
@@ -128,7 +128,7 @@ function Dashboard() {
               )}
               
               {/* User Avatar */}
-              <div className="w-10 h-10 bg-blue-800 rounded-full flex items-center justify-center">
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isDark ? 'bg-blue-500' : 'bg-blue-800'}`}>
                 <span className="text-white font-semibold text-sm">
                   {user.name.split(' ').map((n) => n[0]).join('')}
                 </span>
@@ -138,7 +138,7 @@ function Dashboard() {
         </header>
 
         {/* Main Content */}
-        <main className={`flex-1 p-6 overflow-auto ${isDark ? 'bg-slate-900' : 'bg-slate-50'}`}>
+        <main className={`flex-1 p-6 overflow-auto ${isDark ? 'bg-dark-bg' : 'bg-slate-50'}`}>
           {user.role === 'admin' && <AdminDashboard activeView={activeView} />}
           {user.role === 'engineer' && <EngineerDashboard />}
           {user.role === 'user' && <UserDashboard activeView={activeView} />}

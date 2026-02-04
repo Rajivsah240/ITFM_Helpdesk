@@ -17,12 +17,12 @@ export default function TicketTable({ tickets, onRowClick, showAssignee = true }
     critical: { label: 'Critical', color: isDark ? 'bg-red-900/50 text-red-300' : 'bg-red-100 text-red-700', icon: AlertTriangle },
     high: { label: 'High', color: isDark ? 'bg-orange-900/50 text-orange-300' : 'bg-orange-100 text-orange-700', icon: AlertCircle },
     medium: { label: 'Medium', color: isDark ? 'bg-yellow-900/50 text-yellow-300' : 'bg-yellow-100 text-yellow-700', icon: Info },
-    low: { label: 'Low', color: isDark ? 'bg-slate-700 text-slate-400' : 'bg-slate-100 text-slate-600', icon: Info },
+    low: { label: 'Low', color: isDark ? 'bg-dark-elevated text-slate-400' : 'bg-slate-100 text-slate-600', icon: Info },
   };
 
   const statusConfig = {
-    open: { label: 'Open', color: isDark ? 'bg-slate-700 text-slate-300' : 'bg-slate-100 text-slate-700' },
-    assigned: { label: 'Assigned', color: isDark ? 'bg-blue-900/50 text-blue-300' : 'bg-blue-100 text-blue-700' },
+    open: { label: 'Open', color: isDark ? 'bg-dark-elevated text-slate-300' : 'bg-slate-100 text-slate-700' },
+    assigned: { label: 'Assigned', color: isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-700' },
     'in-progress': { label: 'In Progress', color: isDark ? 'bg-purple-900/50 text-purple-300' : 'bg-purple-100 text-purple-700' },
     resolved: { label: 'Resolved', color: isDark ? 'bg-green-900/50 text-green-300' : 'bg-green-100 text-green-700' },
   };
@@ -39,8 +39,8 @@ export default function TicketTable({ tickets, onRowClick, showAssignee = true }
 
   if (tickets.length === 0) {
     return (
-      <div className={`rounded-xl border p-12 text-center ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
-        <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${isDark ? 'bg-slate-700' : 'bg-slate-100'}`}>
+      <div className={`rounded-xl border p-12 text-center ${isDark ? 'bg-dark-card border-dark-border' : 'bg-white border-slate-200'}`}>
+        <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${isDark ? 'bg-dark-elevated' : 'bg-slate-100'}`}>
           <Info className={`w-8 h-8 ${isDark ? 'text-slate-500' : 'text-slate-400'}`} />
         </div>
         <h3 className={`text-lg font-medium mb-1 ${isDark ? 'text-white' : 'text-slate-800'}`}>No tickets found</h3>
@@ -53,12 +53,12 @@ export default function TicketTable({ tickets, onRowClick, showAssignee = true }
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`rounded-xl border overflow-hidden ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}
+      className={`rounded-xl border overflow-hidden ${isDark ? 'bg-dark-card border-dark-border' : 'bg-white border-slate-200'}`}
     >
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className={`border-b ${isDark ? 'bg-slate-700/50 border-slate-700' : 'bg-slate-50 border-slate-200'}`}>
+            <tr className={`border-b ${isDark ? 'bg-dark-table-header border-dark-border' : 'bg-slate-50 border-slate-200'}`}>
               <th className={`px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                 Ticket ID
               </th>
@@ -90,7 +90,7 @@ export default function TicketTable({ tickets, onRowClick, showAssignee = true }
               </th>
             </tr>
           </thead>
-          <tbody className={`divide-y ${isDark ? 'divide-slate-700' : 'divide-slate-100'}`}>
+          <tbody className={`divide-y ${isDark ? 'divide-dark-border' : 'divide-slate-100'}`}>
             {tickets.map((ticket, index) => {
               const status = statusConfig[ticket.status] || statusConfig.open;
               const severity = ticket.severity ? severityConfig[ticket.severity] : null;
@@ -105,7 +105,7 @@ export default function TicketTable({ tickets, onRowClick, showAssignee = true }
                   onClick={() => onRowClick && onRowClick(ticket)}
                   className={`transition-colors ${
                     onRowClick ? 'cursor-pointer' : ''
-                  } ${isDark ? 'hover:bg-slate-700/50' : 'hover:bg-slate-50'}`}
+                  } ${isDark ? 'hover:bg-dark-hover' : 'hover:bg-slate-50'}`}
                 >
                   <td className="px-4 py-4">
                     <span className={`font-mono text-sm font-medium ${isDark ? 'text-blue-400' : 'text-blue-800'}`}>

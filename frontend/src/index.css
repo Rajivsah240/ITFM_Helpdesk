@@ -2,10 +2,35 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Custom Primary Color Theme - #8A8AFF */
+@theme {
+  --color-blue-50: #F5F5FF;
+  --color-blue-100: #EBEBFF;
+  --color-blue-200: #D6D6FF;
+  --color-blue-300: #BDBDFF;
+  --color-blue-400: #A3A3FF;
+  --color-blue-500: #8A8AFF;
+  --color-blue-600: #7070E6;
+  --color-blue-700: #5656CC;
+  --color-blue-800: #4242B3;
+  --color-blue-900: #2E2E99;
+  --color-blue-950: #1A1A80;
+  
+  /* Custom Dark Mode Colors - Based on #111315 */
+  --color-dark-bg: #111315;
+  --color-dark-card: #18191b;
+  --color-dark-elevated: #1e2023;
+  --color-dark-hover: #252729;
+  --color-dark-border: #2d3033;
+  --color-dark-input: #1e2023;
+  --color-dark-table-header: #1a1c1e;
+  --color-dark-table-row-hover: #1e2023;
+}
+
 :root {
-  --enterprise-blue: #1e40af;
-  --enterprise-blue-light: #3b82f6;
-  --enterprise-blue-dark: #1e3a8a;
+  --enterprise-blue: #4242B3;
+  --enterprise-blue-light: #8A8AFF;
+  --enterprise-blue-dark: #2E2E99;
 }
 
 body {
@@ -17,7 +42,7 @@ body {
 
 .dark body,
 body:has(.dark) {
-  background-color: #0f172a;
+  background-color: #111315;
 }
 
 /* Custom scrollbar */

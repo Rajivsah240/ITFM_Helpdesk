@@ -89,12 +89,12 @@ export default function UserDashboard({ activeView }) {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className={`rounded-xl border overflow-hidden ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}
+        className={`rounded-xl border overflow-hidden ${isDark ? 'bg-dark-card border-dark-border' : 'bg-white border-slate-200'}`}
       >
         {/* Header */}
-        <div className={`p-6 border-b ${isDark ? 'border-slate-700' : 'border-slate-100'}`}>
+        <div className={`p-6 border-b ${isDark ? 'border-dark-border' : 'border-slate-100'}`}>
           <div className="flex items-center gap-3">
-            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${isDark ? 'bg-blue-900/50' : 'bg-blue-100'}`}>
+            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${isDark ? 'bg-blue-500/20' : 'bg-blue-100'}`}>
               <Plus className={`w-6 h-6 ${isDark ? 'text-blue-400' : 'text-blue-800'}`} />
             </div>
             <div>
@@ -151,8 +151,8 @@ export default function UserDashboard({ activeView }) {
                 value={formData.assetId}
                 onChange={handleChange}
                 placeholder="e.g., ASSET-PC-101"
-                className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-800/20 focus:border-blue-800 outline-none transition-all ${
-                  isDark ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400' : 'bg-white border-slate-200 text-slate-800'
+                className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-800/20 dark:focus:ring-blue-500/30 focus:border-blue-800 dark:focus:border-blue-500 outline-none transition-all ${
+                  isDark ? 'bg-dark-input border-dark-border text-white placeholder-slate-400' : 'bg-white border-slate-200 text-slate-800'
                 }`}
               />
             </div>
@@ -169,8 +169,8 @@ export default function UserDashboard({ activeView }) {
                 name="callType"
                 value={formData.callType}
                 onChange={handleChange}
-                className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-800/20 focus:border-blue-800 outline-none transition-all appearance-none ${
-                  isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-slate-200 text-slate-800'
+                className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-800/20 dark:focus:ring-blue-500/30 focus:border-blue-800 dark:focus:border-blue-500 outline-none transition-all appearance-none ${
+                  isDark ? 'bg-dark-input border-dark-border text-white' : 'bg-white border-slate-200 text-slate-800'
                 }`}
               >
                 <option value="">Select call type</option>
@@ -196,8 +196,8 @@ export default function UserDashboard({ activeView }) {
                 value={formData.location}
                 onChange={handleChange}
                 placeholder="e.g., Building A, Floor 2, Room 201"
-                className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-800/20 focus:border-blue-800 outline-none transition-all ${
-                  isDark ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400' : 'bg-white border-slate-200 text-slate-800'
+                className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-800/20 dark:focus:ring-blue-500/30 focus:border-blue-800 dark:focus:border-blue-500 outline-none transition-all ${
+                  isDark ? 'bg-dark-input border-dark-border text-white placeholder-slate-400' : 'bg-white border-slate-200 text-slate-800'
                 }`}
               />
             </div>
@@ -216,14 +216,14 @@ export default function UserDashboard({ activeView }) {
                 onChange={handleChange}
                 placeholder="Describe the issue in detail..."
                 rows={4}
-                className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-800/20 focus:border-blue-800 outline-none transition-all resize-none ${
-                  isDark ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400' : 'bg-white border-slate-200 text-slate-800'
+                className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-800/20 dark:focus:ring-blue-500/30 focus:border-blue-800 dark:focus:border-blue-500 outline-none transition-all resize-none ${
+                  isDark ? 'bg-dark-input border-dark-border text-white placeholder-slate-400' : 'bg-white border-slate-200 text-slate-800'
                 }`}
               />
             </div>
           </div>
 
-          {/* Severity */}
+          
           <div>
             <label className={`block text-sm font-medium mb-1.5 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
               Severity
@@ -234,8 +234,8 @@ export default function UserDashboard({ activeView }) {
                 name="severity"
                 value={formData.severity}
                 onChange={handleChange}
-                className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-800/20 focus:border-blue-800 outline-none transition-all appearance-none ${
-                  isDark ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-slate-200 text-slate-800'
+                className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-800/20 dark:focus:ring-blue-500/30 focus:border-blue-800 dark:focus:border-blue-500 outline-none transition-all appearance-none ${
+                  isDark ? 'bg-dark-input border-dark-border text-white' : 'bg-white border-slate-200 text-slate-800'
                 }`}
               >
                 {severityOptions.map((option) => (
@@ -251,7 +251,7 @@ export default function UserDashboard({ activeView }) {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full flex items-center justify-center gap-2 bg-blue-800 hover:bg-blue-900 disabled:bg-blue-800/50 text-white font-medium py-3 rounded-lg transition-colors shadow-lg shadow-blue-800/25"
+            className="w-full flex items-center justify-center gap-2 bg-blue-800 hover:bg-blue-900 dark:bg-blue-500 dark:hover:bg-blue-600 disabled:bg-blue-800/50 dark:disabled:bg-blue-500/50 text-white font-medium py-3 rounded-lg transition-colors shadow-lg shadow-blue-800/25 dark:shadow-blue-500/25"
           >
             {isSubmitting ? (
               <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
@@ -274,7 +274,7 @@ export default function UserDashboard({ activeView }) {
           <h2 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-slate-800'}`}>My Tickets</h2>
           <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Track the status of your submitted tickets</p>
         </div>
-        <span className={`px-3 py-1.5 text-sm font-medium rounded-lg ${isDark ? 'bg-blue-900/50 text-blue-300' : 'bg-blue-100 text-blue-700'}`}>
+        <span className={`px-3 py-1.5 text-sm font-medium rounded-lg ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-700'}`}>
           {myTickets.length} tickets
         </span>
       </div>
@@ -283,9 +283,9 @@ export default function UserDashboard({ activeView }) {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`rounded-xl border p-12 text-center ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}
+          className={`rounded-xl border p-12 text-center ${isDark ? 'bg-dark-card border-dark-border' : 'bg-white border-slate-200'}`}
         >
-          <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${isDark ? 'bg-slate-700' : 'bg-slate-100'}`}>
+          <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${isDark ? 'bg-dark-elevated' : 'bg-slate-100'}`}>
             <Ticket className={`w-8 h-8 ${isDark ? 'text-slate-500' : 'text-slate-400'}`} />
           </div>
           <h3 className={`text-lg font-medium mb-1 ${isDark ? 'text-white' : 'text-slate-800'}`}>No tickets yet</h3>
@@ -301,16 +301,16 @@ export default function UserDashboard({ activeView }) {
                 layout
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`rounded-xl border overflow-hidden ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}
+                className={`rounded-xl border overflow-hidden ${isDark ? 'bg-dark-card border-dark-border' : 'bg-white border-slate-200'}`}
               >
                 {/* Card Header */}
                 <div
                   onClick={() => setExpandedTicket(isExpanded ? null : ticket._id)}
-                  className={`p-5 cursor-pointer transition-colors ${isDark ? 'hover:bg-slate-700/50' : 'hover:bg-slate-50'}`}
+                  className={`p-5 cursor-pointer transition-colors ${isDark ? 'hover:bg-dark-hover' : 'hover:bg-slate-50'}`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${isDark ? 'bg-blue-900/50' : 'bg-blue-100'}`}>
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${isDark ? 'bg-blue-500/20' : 'bg-blue-100'}`}>
                         <Ticket className={`w-6 h-6 ${isDark ? 'text-blue-400' : 'text-blue-800'}`} />
                       </div>
                       <div>
@@ -322,8 +322,8 @@ export default function UserDashboard({ activeView }) {
                               : ticket.status === 'in-progress'
                               ? isDark ? 'bg-purple-900/50 text-purple-300' : 'bg-purple-100 text-purple-700'
                               : ticket.status === 'assigned'
-                              ? isDark ? 'bg-blue-900/50 text-blue-300' : 'bg-blue-100 text-blue-700'
-                              : isDark ? 'bg-slate-700 text-slate-300' : 'bg-slate-100 text-slate-700'
+                              ? isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-700'
+                              : isDark ? 'bg-dark-elevated text-slate-300' : 'bg-slate-100 text-slate-700'
                           }`}>
                             {ticket.status === 'in-progress' ? 'In Progress' : 
                              ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1)}
@@ -349,9 +349,9 @@ export default function UserDashboard({ activeView }) {
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.2 }}
                     >
-                      <div className={`border-t p-5 ${isDark ? 'border-slate-700' : 'border-slate-100'}`}>
+                      <div className={`border-t p-5 ${isDark ? 'border-dark-border' : 'border-slate-100'}`}>
                         {/* Ticket Details */}
-                        <div className={`grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 p-4 rounded-lg ${isDark ? 'bg-slate-700/50' : 'bg-slate-50'}`}>
+                        <div className={`grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 p-4 rounded-lg ${isDark ? 'bg-dark-elevated' : 'bg-slate-50'}`}>
                           <div>
                             <p className={`text-xs mb-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Asset ID</p>
                             <p className={`text-sm font-medium ${isDark ? 'text-white' : 'text-slate-800'}`}>{ticket.assetId}</p>

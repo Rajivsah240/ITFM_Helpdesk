@@ -105,7 +105,7 @@ export default function AdminDashboard({ activeView }) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className={`rounded-xl border p-5 ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}
+              className={`rounded-xl border p-5 ${isDark ? 'bg-dark-card border-dark-border' : 'bg-white border-slate-200'}`}
             >
               <div className="flex items-center gap-4">
                 <div className={`w-12 h-12 ${stat.iconBg} rounded-xl flex items-center justify-center`}>
@@ -124,7 +124,7 @@ export default function AdminDashboard({ activeView }) {
       {/* Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Unassigned Tickets */}
-        <div className={`lg:col-span-2 rounded-xl border p-6 ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
+        <div className={`lg:col-span-2 rounded-xl border p-6 ${isDark ? 'bg-dark-card border-dark-border' : 'bg-white border-slate-200'}`}>
           <div className="flex items-center justify-between mb-4">
             <h3 className={`font-semibold ${isDark ? 'text-white' : 'text-slate-800'}`}>Unassigned Tickets</h3>
             <span className={`px-2.5 py-1 text-xs font-medium rounded-full ${isDark ? 'bg-red-900/50 text-red-300' : 'bg-red-100 text-red-700'}`}>
@@ -138,7 +138,7 @@ export default function AdminDashboard({ activeView }) {
                   key={ticket._id}
                   onClick={() => setSelectedTicket(ticket)}
                   className={`flex items-center gap-4 p-4 rounded-lg cursor-pointer transition-colors ${
-                    isDark ? 'bg-slate-700/50 hover:bg-slate-700' : 'bg-slate-50 hover:bg-slate-100'
+                    isDark ? 'bg-dark-elevated hover:bg-dark-hover' : 'bg-slate-50 hover:bg-slate-100'
                   }`}
                 >
                   <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isDark ? 'bg-red-900/50' : 'bg-red-100'}`}>
@@ -148,7 +148,7 @@ export default function AdminDashboard({ activeView }) {
                     <p className={`font-medium ${isDark ? 'text-white' : 'text-slate-800'}`}>{ticket.ticketId}</p>
                     <p className={`text-sm truncate ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{ticket.problemDescription}</p>
                   </div>
-                  <button className="px-3 py-1.5 bg-blue-800 text-white text-sm font-medium rounded-lg hover:bg-blue-900 transition-colors">
+                  <button className="px-3 py-1.5 bg-blue-800 dark:bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-900 dark:hover:bg-blue-600 transition-colors">
                     Assign
                   </button>
                 </div>
@@ -163,7 +163,7 @@ export default function AdminDashboard({ activeView }) {
         </div>
 
         {/* Engineer Workload */}
-        <div className={`rounded-xl border p-6 ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
+        <div className={`rounded-xl border p-6 ${isDark ? 'bg-dark-card border-dark-border' : 'bg-white border-slate-200'}`}>
           <div className="flex items-center justify-between mb-4">
             <h3 className={`font-semibold ${isDark ? 'text-white' : 'text-slate-800'}`}>Engineer Workload</h3>
             <Users className={`w-5 h-5 ${isDark ? 'text-slate-500' : 'text-slate-400'}`} />
@@ -180,7 +180,7 @@ export default function AdminDashboard({ activeView }) {
                     <span className={`text-sm font-medium ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>{engineer.name}</span>
                     <span className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{count} tickets</span>
                   </div>
-                  <div className={`h-2 rounded-full overflow-hidden ${isDark ? 'bg-slate-700' : 'bg-slate-100'}`}>
+                  <div className={`h-2 rounded-full overflow-hidden ${isDark ? 'bg-dark-elevated' : 'bg-slate-100'}`}>
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${percentage}%` }}
@@ -224,7 +224,7 @@ export default function AdminDashboard({ activeView }) {
           <h2 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-slate-800'}`}>Active Issues</h2>
           <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Tickets currently being worked on</p>
         </div>
-        <span className={`px-3 py-1.5 text-sm font-medium rounded-lg ${isDark ? 'bg-blue-900/50 text-blue-300' : 'bg-blue-100 text-blue-700'}`}>
+        <span className={`px-3 py-1.5 text-sm font-medium rounded-lg ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-700'}`}>
           {active.length} tickets
         </span>
       </div>
@@ -251,11 +251,11 @@ export default function AdminDashboard({ activeView }) {
               key={engineer._id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`rounded-xl border p-6 ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}
+              className={`rounded-xl border p-6 ${isDark ? 'bg-dark-card border-dark-border' : 'bg-white border-slate-200'}`}
             >
               <div className="flex items-center gap-4 mb-4">
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center ${isDark ? 'bg-blue-900/50' : 'bg-blue-100'}`}>
-                  <span className={`font-semibold ${isDark ? 'text-blue-300' : 'text-blue-800'}`}>
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center ${isDark ? 'bg-blue-500/20' : 'bg-blue-100'}`}>
+                  <span className={`font-semibold ${isDark ? 'text-blue-400' : 'text-blue-800'}`}>
                     {engineer.name.split(' ').map((n) => n[0]).join('')}
                   </span>
                 </div>
@@ -274,7 +274,7 @@ export default function AdminDashboard({ activeView }) {
                     {engineerTickets.slice(0, 3).map((ticket) => (
                       <div
                         key={ticket._id}
-                        className={`px-3 py-2 rounded-lg text-sm ${isDark ? 'bg-slate-700/50' : 'bg-slate-50'}`}
+                        className={`px-3 py-2 rounded-lg text-sm ${isDark ? 'bg-dark-elevated' : 'bg-slate-50'}`}
                       >
                         <span className={`font-mono ${isDark ? 'text-blue-400' : 'text-blue-800'}`}>{ticket.ticketId}</span>
                         <span className={`mx-2 ${isDark ? 'text-slate-600' : 'text-slate-400'}`}>·</span>
@@ -310,10 +310,10 @@ export default function AdminDashboard({ activeView }) {
               key={ticket._id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`rounded-xl border overflow-hidden ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}
+              className={`rounded-xl border overflow-hidden ${isDark ? 'bg-dark-card border-dark-border' : 'bg-white border-slate-200'}`}
             >
               {/* Header */}
-              <div className={`p-5 border-b ${isDark ? 'border-slate-700' : 'border-slate-100'}`}>
+              <div className={`p-5 border-b ${isDark ? 'border-dark-border' : 'border-slate-100'}`}>
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="flex items-center gap-3 mb-1">
@@ -328,12 +328,12 @@ export default function AdminDashboard({ activeView }) {
               </div>
               
               {/* Request Details */}
-              <div className={`p-5 ${isDark ? 'bg-slate-700/30' : 'bg-slate-50'}`}>
+              <div className={`p-5 ${isDark ? 'bg-dark-elevated' : 'bg-slate-50'}`}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
                     <p className={`text-xs mb-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Current Engineer</p>
                     <div className="flex items-center gap-2">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isDark ? 'bg-blue-900/50' : 'bg-blue-100'}`}>
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isDark ? 'bg-blue-500/20' : 'bg-blue-100'}`}>
                         <User className={`w-4 h-4 ${isDark ? 'text-blue-400' : 'text-blue-800'}`} />
                       </div>
                       <span className={`font-medium ${isDark ? 'text-white' : 'text-slate-800'}`}>{ticket.assignedTo?.name}</span>
@@ -347,20 +347,20 @@ export default function AdminDashboard({ activeView }) {
                   </div>
                 </div>
                 
-                <div className={`p-4 rounded-lg ${isDark ? 'bg-slate-800' : 'bg-white'}`}>
+                <div className={`p-4 rounded-lg ${isDark ? 'bg-dark-card' : 'bg-white'}`}>
                   <p className={`text-xs mb-2 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Reason for Reassignment</p>
                   <p className={`italic ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>"{ticket.reassignRequest.reason}"</p>
                 </div>
               </div>
               
               {/* Actions */}
-              <div className={`p-5 border-t flex items-center justify-between ${isDark ? 'border-slate-700' : 'border-slate-100'}`}>
+              <div className={`p-5 border-t flex items-center justify-between ${isDark ? 'border-dark-border' : 'border-slate-100'}`}>
                 <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                   Select a new engineer to reassign this ticket
                 </p>
                 <button
                   onClick={() => setReassignTicket(ticket)}
-                  className="px-4 py-2 bg-blue-800 text-white text-sm font-medium rounded-lg hover:bg-blue-900 transition-colors"
+                  className="px-4 py-2 bg-blue-800 dark:bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-900 dark:hover:bg-blue-600 transition-colors"
                 >
                   Reassign to Another Engineer
                 </button>
@@ -369,7 +369,7 @@ export default function AdminDashboard({ activeView }) {
           ))}
         </div>
       ) : (
-        <div className={`rounded-xl border p-12 text-center ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
+        <div className={`rounded-xl border p-12 text-center ${isDark ? 'bg-dark-card border-dark-border' : 'bg-white border-slate-200'}`}>
           <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${isDark ? 'bg-green-900/30' : 'bg-green-100'}`}>
             <CheckCircle className={`w-8 h-8 ${isDark ? 'text-green-400' : 'text-green-600'}`} />
           </div>

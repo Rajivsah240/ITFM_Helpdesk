@@ -30,8 +30,8 @@ export default function AuthWrapper({ children }) {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-800"></div>
+      <div className="min-h-screen bg-slate-50 dark:bg-dark-bg flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-800 dark:border-blue-500"></div>
       </div>
     );
   }
@@ -85,7 +85,7 @@ export default function AuthWrapper({ children }) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-100 to-slate-200 dark:from-dark-bg dark:to-dark-card flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -93,7 +93,7 @@ export default function AuthWrapper({ children }) {
       >
         {/* Logo/Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-800 rounded-2xl shadow-lg mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-800 dark:bg-blue-500 rounded-2xl shadow-lg mb-4">
             <Building2 className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-slate-800 dark:text-white">ITFM System</h1>
@@ -101,9 +101,9 @@ export default function AuthWrapper({ children }) {
         </div>
 
         {/* Card */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl overflow-hidden">
+        <div className="bg-white dark:bg-dark-card rounded-2xl shadow-xl overflow-hidden">
           {/* Tab Header */}
-          <div className="flex border-b border-slate-100 dark:border-slate-700">
+          <div className="flex border-b border-slate-100 dark:border-dark-border">
             <button
               onClick={() => {
                 setIsLoginMode(true);
@@ -111,7 +111,7 @@ export default function AuthWrapper({ children }) {
               }}
               className={`flex-1 py-4 text-sm font-medium transition-colors ${
                 isLoginMode
-                  ? 'text-blue-800 dark:text-blue-400 border-b-2 border-blue-800 dark:border-blue-400'
+                  ? 'text-blue-800 dark:text-blue-400 border-b-2 border-blue-800 dark:border-blue-500'
                   : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
               }`}
             >
@@ -124,7 +124,7 @@ export default function AuthWrapper({ children }) {
               }}
               className={`flex-1 py-4 text-sm font-medium transition-colors ${
                 !isLoginMode
-                  ? 'text-blue-800 dark:text-blue-400 border-b-2 border-blue-800 dark:border-blue-400'
+                  ? 'text-blue-800 dark:text-blue-400 border-b-2 border-blue-800 dark:border-blue-500'
                   : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
               }`}
             >
@@ -169,7 +169,7 @@ export default function AuthWrapper({ children }) {
                         value={formData.name}
                         onChange={handleChange}
                         placeholder="John Doe"
-                        className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-800/20 focus:border-blue-800 outline-none transition-all bg-white dark:bg-slate-700 dark:text-white"
+className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-500/30 focus:border-blue-800 dark:focus:border-blue-500 outline-none transition-all bg-white dark:bg-dark-input dark:text-white"
                       />
                     </div>
                   </div>
@@ -187,7 +187,7 @@ export default function AuthWrapper({ children }) {
                         value={formData.department}
                         onChange={handleChange}
                         placeholder="IT Support"
-                        className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-800/20 focus:border-blue-800 outline-none transition-all bg-white dark:bg-slate-700 dark:text-white"
+className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-500/30 focus:border-blue-800 dark:focus:border-blue-500 outline-none transition-all bg-white dark:bg-dark-input dark:text-white"
                       />
                     </div>
                   </div>
@@ -205,7 +205,7 @@ export default function AuthWrapper({ children }) {
                         value={formData.phone}
                         onChange={handleChange}
                         placeholder="+1234567890"
-                        className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-800/20 focus:border-blue-800 outline-none transition-all bg-white dark:bg-slate-700 dark:text-white"
+className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-500/30 focus:border-blue-800 dark:focus:border-blue-500 outline-none transition-all bg-white dark:bg-dark-input dark:text-white"
                       />
                     </div>
                   </div>
@@ -221,8 +221,8 @@ export default function AuthWrapper({ children }) {
                         onClick={() => setFormData({ ...formData, role: 'user' })}
                         className={`flex items-center justify-center gap-2 p-3 rounded-lg border-2 transition-all ${
                           formData.role === 'user'
-                            ? 'border-blue-800 bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400'
-                            : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 text-slate-600 dark:text-slate-400'
+                            ? 'border-blue-800 bg-blue-50 dark:bg-blue-500/20 dark:border-blue-500 text-blue-800 dark:text-blue-400'
+                            : 'border-slate-200 dark:border-dark-border hover:border-slate-300 dark:hover:border-dark-hover text-slate-600 dark:text-slate-400'
                         }`}
                       >
                         <User className="w-5 h-5" />
@@ -233,8 +233,8 @@ export default function AuthWrapper({ children }) {
                         onClick={() => setFormData({ ...formData, role: 'engineer' })}
                         className={`flex items-center justify-center gap-2 p-3 rounded-lg border-2 transition-all ${
                           formData.role === 'engineer'
-                            ? 'border-blue-800 bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400'
-                            : 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 text-slate-600 dark:text-slate-400'
+                            ? 'border-blue-800 bg-blue-50 dark:bg-blue-500/20 dark:border-blue-500 text-blue-800 dark:text-blue-400'
+                            : 'border-slate-200 dark:border-dark-border hover:border-slate-300 dark:hover:border-dark-hover text-slate-600 dark:text-slate-400'
                         }`}
                       >
                         <BadgeCheck className="w-5 h-5" />
@@ -259,7 +259,7 @@ export default function AuthWrapper({ children }) {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="john@example.com"
-                  className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-800/20 focus:border-blue-800 outline-none transition-all bg-white dark:bg-slate-700 dark:text-white"
+className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-500/30 focus:border-blue-800 dark:focus:border-blue-500 outline-none transition-all bg-white dark:bg-dark-input dark:text-white"
                 />
               </div>
             </div>
@@ -277,7 +277,7 @@ export default function AuthWrapper({ children }) {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-800/20 focus:border-blue-800 outline-none transition-all bg-white dark:bg-slate-700 dark:text-white"
+className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-500/30 focus:border-blue-800 dark:focus:border-blue-500 outline-none transition-all bg-white dark:bg-dark-input dark:text-white"
                 />
               </div>
             </div>
@@ -286,7 +286,7 @@ export default function AuthWrapper({ children }) {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full flex items-center justify-center gap-2 bg-blue-800 hover:bg-blue-900 disabled:bg-blue-800/50 text-white font-medium py-2.5 rounded-lg transition-colors shadow-lg shadow-blue-800/25"
+              className="w-full flex items-center justify-center gap-2 bg-blue-800 hover:bg-blue-900 dark:bg-blue-500 dark:hover:bg-blue-600 disabled:bg-blue-800/50 dark:disabled:bg-blue-500/50 text-white font-medium py-2.5 rounded-lg transition-colors shadow-lg shadow-blue-800/25 dark:shadow-blue-500/25"
             >
               {isSubmitting ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
@@ -306,7 +306,7 @@ export default function AuthWrapper({ children }) {
 
           {/* Info Box */}
           <div className="px-6 pb-6">
-            <div className="p-4 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
+            <div className="p-4 bg-slate-50 dark:bg-dark-elevated rounded-lg">
               <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mb-2">
                 {isLoginMode ? 'Default Admin Credentials:' : 'Registration Info:'}
               </p>

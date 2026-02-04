@@ -27,7 +27,7 @@ export default function AssignModal({ ticket, engineers, onAssign, onClose, titl
     { value: 'critical', label: 'Critical', desc: 'System down, business impact', icon: AlertTriangle, color: isDark ? 'border-red-700 bg-red-900/30' : 'border-red-300 bg-red-50' },
     { value: 'high', label: 'High', desc: 'Major functionality affected', icon: AlertCircle, color: isDark ? 'border-orange-700 bg-orange-900/30' : 'border-orange-300 bg-orange-50' },
     { value: 'medium', label: 'Medium', desc: 'Minor issue, workaround exists', icon: Info, color: isDark ? 'border-yellow-700 bg-yellow-900/30' : 'border-yellow-300 bg-yellow-50' },
-    { value: 'low', label: 'Low', desc: 'Low priority, non-urgent', icon: Info, color: isDark ? 'border-slate-700 bg-slate-700/30' : 'border-slate-300 bg-slate-50' },
+    { value: 'low', label: 'Low', desc: 'Low priority, non-urgent', icon: Info, color: isDark ? 'border-dark-border bg-dark-elevated' : 'border-slate-300 bg-slate-50' },
   ];
 
   return (
@@ -44,24 +44,24 @@ export default function AssignModal({ ticket, engineers, onAssign, onClose, titl
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           onClick={(e) => e.stopPropagation()}
-          className={`rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden ${isDark ? 'bg-slate-800' : 'bg-white'}`}
+          className={`rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden ${isDark ? 'bg-dark-card' : 'bg-white'}`}
         >
           {/* Header */}
-          <div className={`flex items-center justify-between px-6 py-4 border-b ${isDark ? 'border-slate-700' : 'border-slate-100'}`}>
+          <div className={`flex items-center justify-between px-6 py-4 border-b ${isDark ? 'border-dark-border' : 'border-slate-100'}`}>
             <div>
               <h2 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-slate-800'}`}>{title}</h2>
               <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{ticket.ticketId}</p>
             </div>
             <button
               onClick={onClose}
-              className={`p-2 rounded-lg transition-colors ${isDark ? 'hover:bg-slate-700' : 'hover:bg-slate-100'}`}
+              className={`p-2 rounded-lg transition-colors ${isDark ? 'hover:bg-dark-hover' : 'hover:bg-slate-100'}`}
             >
               <X className={`w-5 h-5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`} />
             </button>
           </div>
 
           {/* Ticket Info */}
-          <div className={`px-6 py-4 border-b ${isDark ? 'bg-slate-700/50 border-slate-700' : 'bg-slate-50 border-slate-100'}`}>
+          <div className={`px-6 py-4 border-b ${isDark ? 'bg-dark-elevated border-dark-border' : 'bg-slate-50 border-slate-100'}`}>
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
                 <p className={isDark ? 'text-slate-400' : 'text-slate-500'}>Asset ID</p>
@@ -91,8 +91,8 @@ export default function AssignModal({ ticket, engineers, onAssign, onClose, titl
                     key={engineer._id}
                     className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-all ${
                       selectedEngineer === engineer._id
-                        ? isDark ? 'border-blue-500 bg-blue-900/30' : 'border-blue-800 bg-blue-50'
-                        : isDark ? 'border-slate-600 hover:border-slate-500' : 'border-slate-200 hover:border-slate-300'
+                        ? isDark ? 'border-blue-500 bg-blue-500/20' : 'border-blue-800 bg-blue-50'
+                        : isDark ? 'border-dark-border hover:border-dark-hover' : 'border-slate-200 hover:border-slate-300'
                     }`}
                   >
                     <input
@@ -103,7 +103,7 @@ export default function AssignModal({ ticket, engineers, onAssign, onClose, titl
                       onChange={(e) => setSelectedEngineer(e.target.value)}
                       className="sr-only"
                     />
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isDark ? 'bg-blue-900/50' : 'bg-blue-100'}`}>
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isDark ? 'bg-blue-500/20' : 'bg-blue-100'}`}>
                       <User className={`w-5 h-5 ${isDark ? 'text-blue-400' : 'text-blue-800'}`} />
                     </div>
                     <div className="flex-1">
@@ -133,7 +133,7 @@ export default function AssignModal({ ticket, engineers, onAssign, onClose, titl
                       className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-all ${
                         severity === option.value
                           ? `${option.color} border-2`
-                          : isDark ? 'border-slate-600 hover:border-slate-500' : 'border-slate-200 hover:border-slate-300'
+                          : isDark ? 'border-dark-border hover:border-dark-hover' : 'border-slate-200 hover:border-slate-300'
                       }`}
                     >
                       <input
@@ -168,7 +168,7 @@ export default function AssignModal({ ticket, engineers, onAssign, onClose, titl
               <button
                 type="submit"
                 disabled={!selectedEngineer || (!isReassign && !severity)}
-                className="flex-1 py-2.5 bg-blue-800 text-white font-medium rounded-lg hover:bg-blue-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 py-2.5 bg-blue-800 dark:bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-900 dark:hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isReassign ? 'Reassign Ticket' : 'Assign Ticket'}
               </button>
@@ -176,7 +176,7 @@ export default function AssignModal({ ticket, engineers, onAssign, onClose, titl
                 type="button"
                 onClick={onClose}
                 className={`px-6 py-2.5 font-medium rounded-lg transition-colors ${
-                  isDark ? 'bg-slate-700 text-slate-300 hover:bg-slate-600' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                  isDark ? 'bg-dark-elevated text-slate-300 hover:bg-dark-hover' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >
                 Cancel

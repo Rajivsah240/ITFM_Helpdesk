@@ -58,7 +58,7 @@ export default function ActionLogger({ ticket, onAddAction, onResolve }) {
           {!isAdding && (
             <button
               onClick={() => setIsAdding(true)}
-              className="flex items-center gap-2 px-3 py-1.5 bg-blue-800 text-white text-sm font-medium rounded-lg hover:bg-blue-900 transition-colors"
+              className="flex items-center gap-2 px-3 py-1.5 bg-blue-800 dark:bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-900 dark:hover:bg-blue-600 transition-colors"
             >
               <Plus className="w-4 h-4" />
               Add Action
@@ -99,7 +99,7 @@ export default function ActionLogger({ ticket, onAddAction, onResolve }) {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             onSubmit={handleSubmit}
-            className={`rounded-lg p-4 space-y-3 ${isDark ? 'bg-blue-900/30' : 'bg-blue-50'}`}
+            className={`rounded-lg p-4 space-y-3 ${isDark ? 'bg-blue-500/10' : 'bg-blue-50'}`}
           >
             <div>
               <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
@@ -114,14 +114,14 @@ export default function ActionLogger({ ticket, onAddAction, onResolve }) {
                 placeholder="Describe the action taken..."
                 rows={3}
                 className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-800/20 focus:border-blue-800 outline-none transition-all resize-none ${
-                  isDark ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400' : 'bg-white border-slate-200 text-slate-800'
+                  isDark ? 'bg-dark-input border-dark-border text-white placeholder-slate-400' : 'bg-white border-slate-200 text-slate-800'
                 }`}
               />
             </div>
             <div className="flex items-center gap-2">
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-800 text-white text-sm font-medium rounded-lg hover:bg-blue-900 transition-colors"
+                className="px-4 py-2 bg-blue-800 dark:bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-900 dark:hover:bg-blue-600 transition-colors"
               >
                 Save Action
               </button>
@@ -133,7 +133,7 @@ export default function ActionLogger({ ticket, onAddAction, onResolve }) {
                   setError('');
                 }}
                 className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                  isDark ? 'bg-slate-600 text-slate-200 hover:bg-slate-500' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                  isDark ? 'bg-dark-elevated text-slate-200 hover:bg-dark-hover' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
                 }`}
               >
                 Cancel
@@ -146,7 +146,7 @@ export default function ActionLogger({ ticket, onAddAction, onResolve }) {
       {/* Action Log Timeline */}
       <div className="space-y-3">
         {(!ticket.actionLogs || ticket.actionLogs.length === 0) ? (
-          <div className={`text-center py-8 rounded-lg ${isDark ? 'bg-slate-700/50' : 'bg-slate-50'}`}>
+          <div className={`text-center py-8 rounded-lg ${isDark ? 'bg-dark-elevated' : 'bg-slate-50'}`}>
             <FileText className={`w-10 h-10 mx-auto mb-2 ${isDark ? 'text-slate-600' : 'text-slate-300'}`} />
             <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>No actions logged yet</p>
             <p className={`text-xs mt-1 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
@@ -155,7 +155,7 @@ export default function ActionLogger({ ticket, onAddAction, onResolve }) {
           </div>
         ) : (
           <div className="relative">
-            <div className={`absolute left-4 top-0 bottom-0 w-0.5 ${isDark ? 'bg-slate-700' : 'bg-slate-200'}`} />
+            <div className={`absolute left-4 top-0 bottom-0 w-0.5 ${isDark ? 'bg-dark-border' : 'bg-slate-200'}`} />
             {ticket.actionLogs.map((log, index) => (
               <motion.div
                 key={log._id}
@@ -164,8 +164,8 @@ export default function ActionLogger({ ticket, onAddAction, onResolve }) {
                 transition={{ delay: index * 0.1 }}
                 className="relative pl-10 pb-4"
               >
-                <div className={`absolute left-2.5 w-3 h-3 bg-blue-800 rounded-full border-2 ${isDark ? 'border-slate-800' : 'border-white'}`} />
-                <div className={`rounded-lg p-4 shadow-sm ${isDark ? 'bg-slate-700 border border-slate-600' : 'bg-white border border-slate-200'}`}>
+                <div className={`absolute left-2.5 w-3 h-3 rounded-full border-2 ${isDark ? 'bg-blue-500 border-dark-card' : 'bg-blue-800 border-white'}`} />
+                <div className={`rounded-lg p-4 shadow-sm ${isDark ? 'bg-dark-elevated border border-dark-border' : 'bg-white border border-slate-200'}`}>
                   <p className={`text-sm ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>{log.action}</p>
                   <div className={`flex items-center gap-4 mt-3 text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                     <span className="flex items-center gap-1">

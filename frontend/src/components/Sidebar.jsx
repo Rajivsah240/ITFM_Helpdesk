@@ -48,11 +48,11 @@ export default function Sidebar({ activeView, setActiveView }) {
       initial={{ x: -280 }}
       animate={{ x: 0 }}
       className={`w-64 border-r min-h-screen flex flex-col ${
-        isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'
+        isDark ? 'bg-dark-card border-dark-border' : 'bg-white border-slate-200'
       }`}
     >
       {/* Logo */}
-      <div className={`p-6 border-b ${isDark ? 'border-slate-700' : 'border-slate-100'}`}>
+      <div className={`p-6 border-b ${isDark ? 'border-dark-border' : 'border-slate-100'}`}>
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-blue-800 rounded-xl flex items-center justify-center shadow-lg shadow-blue-800/25">
             <Building2 className="w-5 h-5 text-white" />
@@ -65,9 +65,9 @@ export default function Sidebar({ activeView, setActiveView }) {
       </div>
 
       {/* User Info */}
-      <div className={`p-4 mx-4 mt-4 rounded-xl ${isDark ? 'bg-slate-700/50' : 'bg-slate-50'}`}>
+      <div className={`p-4 mx-4 mt-4 rounded-xl ${isDark ? 'bg-dark-elevated' : 'bg-slate-50'}`}>
         <div className="flex items-center gap-3">
-          <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isDark ? 'bg-blue-900' : 'bg-blue-100'}`}>
+          <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isDark ? 'bg-blue-500/20' : 'bg-blue-100'}`}>
             <span className={`font-semibold text-sm ${isDark ? 'text-blue-400' : 'text-blue-800'}`}>
               {user.name.split(' ').map((n) => n[0]).join('')}
             </span>
@@ -94,9 +94,9 @@ export default function Sidebar({ activeView, setActiveView }) {
               onClick={() => setActiveView(item.id)}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                 isActive
-                  ? 'bg-blue-800 text-white shadow-lg shadow-blue-800/25'
+                  ? 'bg-blue-800 dark:bg-blue-500 text-white shadow-lg shadow-blue-800/25 dark:shadow-blue-500/25'
                   : isDark 
-                    ? 'text-slate-300 hover:bg-slate-700' 
+                    ? 'text-slate-300 hover:bg-dark-hover' 
                     : 'text-slate-600 hover:bg-slate-100'
               }`}
             >
@@ -114,7 +114,7 @@ export default function Sidebar({ activeView, setActiveView }) {
       </nav>
 
       {/* Logout */}
-      <div className={`p-4 border-t ${isDark ? 'border-slate-700' : 'border-slate-100'}`}>
+      <div className={`p-4 border-t ${isDark ? 'border-dark-border' : 'border-slate-100'}`}>
         <button
           onClick={logout}
           className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${

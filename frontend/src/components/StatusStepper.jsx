@@ -45,12 +45,12 @@ export default function StatusStepper({ ticket, showActionLogs = false }) {
     <div className="py-4">
       <div className="relative">
         {/* Progress Line */}
-        <div className={`absolute left-6 top-6 bottom-6 w-0.5 ${isDark ? 'bg-slate-700' : 'bg-slate-200'}`} />
+        <div className={`absolute left-6 top-6 bottom-6 w-0.5 ${isDark ? 'bg-dark-border' : 'bg-slate-200'}`} />
         <motion.div
           initial={{ height: 0 }}
           animate={{ height: `${(currentIndex / (steps.length - 1)) * 100}%` }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
-          className="absolute left-6 top-6 w-0.5 bg-blue-800"
+          className={`absolute left-6 top-6 w-0.5 ${isDark ? 'bg-blue-500' : 'bg-blue-800'}`}
           style={{ maxHeight: 'calc(100% - 48px)' }}
         />
 
@@ -76,10 +76,10 @@ export default function StatusStepper({ ticket, showActionLogs = false }) {
                 <div
                   className={`relative z-10 w-12 h-12 rounded-full flex items-center justify-center transition-all ${
                     isCompleted
-                      ? 'bg-blue-800 text-white'
+                      ? 'bg-blue-800 dark:bg-blue-500 text-white'
                       : isCurrent
-                      ? isDark ? 'bg-blue-800 text-white ring-4 ring-blue-900' : 'bg-blue-800 text-white ring-4 ring-blue-200'
-                      : isDark ? 'bg-slate-700 text-slate-500' : 'bg-slate-100 text-slate-400'
+                      ? isDark ? 'bg-blue-500 text-white ring-4 ring-blue-500/30' : 'bg-blue-800 text-white ring-4 ring-blue-200'
+                      : isDark ? 'bg-dark-elevated text-slate-500' : 'bg-slate-100 text-slate-400'
                   }`}
                 >
                   {isCompleted ? (
@@ -109,7 +109,7 @@ export default function StatusStepper({ ticket, showActionLogs = false }) {
                       {step.label}
                     </h4>
                     {isCurrent && (
-                      <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${isDark ? 'bg-blue-900 text-blue-300' : 'bg-blue-100 text-blue-800'}`}>
+                      <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-800'}`}>
                         Current
                       </span>
                     )}
@@ -124,7 +124,7 @@ export default function StatusStepper({ ticket, showActionLogs = false }) {
                   
                   {/* Action Logs for In Progress Step */}
                   {showActionsForStep && (
-                    <div className={`mt-4 p-4 rounded-lg ${isDark ? 'bg-slate-800 border border-slate-700' : 'bg-slate-50 border border-slate-200'}`}>
+                    <div className={`mt-4 p-4 rounded-lg ${isDark ? 'bg-dark-card border border-dark-border' : 'bg-slate-50 border border-slate-200'}`}>
                       <div className="flex items-center gap-2 mb-3">
                         <Wrench className={`w-4 h-4 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
                         <h5 className={`text-sm font-medium ${isDark ? 'text-white' : 'text-slate-800'}`}>
@@ -135,7 +135,7 @@ export default function StatusStepper({ ticket, showActionLogs = false }) {
                         {ticket.actionLogs.map((log) => (
                           <div 
                             key={log._id} 
-                            className={`pl-4 border-l-2 ${isDark ? 'border-blue-600' : 'border-blue-400'}`}
+                            className={`pl-4 border-l-2 ${isDark ? 'border-blue-500' : 'border-blue-400'}`}
                           >
                             <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
                               {log.action}

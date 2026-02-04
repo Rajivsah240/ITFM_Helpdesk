@@ -105,10 +105,10 @@ export default function NotificationPanel({ isOpen, onClose }) {
             initial={{ opacity: 0, y: -10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            className="absolute right-0 top-full mt-2 w-96 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden z-50"
+            className="absolute right-0 top-full mt-2 w-96 bg-white dark:bg-dark-card rounded-xl shadow-2xl border border-slate-200 dark:border-dark-border overflow-hidden z-50"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-dark-border">
               <h3 className="font-semibold text-slate-800 dark:text-white">Notifications</h3>
               <div className="flex items-center gap-2">
                 {notifications.length > 0 && (
@@ -121,7 +121,7 @@ export default function NotificationPanel({ isOpen, onClose }) {
                 )}
                 <button
                   onClick={onClose}
-                  className="p-1 hover:bg-slate-100 dark:hover:bg-slate-700 rounded"
+                  className="p-1 hover:bg-slate-100 dark:hover:bg-dark-hover rounded"
                 >
                   <X className="w-4 h-4 text-slate-500" />
                 </button>
@@ -137,23 +137,23 @@ export default function NotificationPanel({ isOpen, onClose }) {
                 </div>
               ) : notifications.length === 0 ? (
                 <div className="py-12 text-center">
-                  <Bell className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
+                  <Bell className="w-10 h-10 text-slate-300 dark:text-dark-border mx-auto mb-3" />
                   <p className="text-slate-500 dark:text-slate-400 text-sm">No notifications</p>
                 </div>
               ) : (
-                <div className="divide-y divide-slate-100 dark:divide-slate-700">
+                <div className="divide-y divide-slate-100 dark:divide-dark-border">
                   {notifications.map((notification) => (
                     <motion.div
                       key={notification._id}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       onClick={() => handleMarkAsRead(notification._id)}
-                      className={`px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 cursor-pointer transition-colors ${
-                        !notification.read ? 'bg-blue-50/50 dark:bg-blue-900/20' : ''
+                      className={`px-4 py-3 hover:bg-slate-50 dark:hover:bg-dark-hover cursor-pointer transition-colors ${
+                        !notification.read ? 'bg-blue-50/50 dark:bg-blue-500/10' : ''
                       }`}
                     >
                       <div className="flex gap-3">
-                        <div className="flex-shrink-0 w-8 h-8 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center">
+                        <div className="flex-shrink-0 w-8 h-8 bg-slate-100 dark:bg-dark-elevated rounded-full flex items-center justify-center">
                           {getIcon(notification.type)}
                         </div>
                         <div className="flex-1 min-w-0">

@@ -28,7 +28,7 @@ const severityConfig = {
 };
 
 const statusConfig = {
-  assigned: { label: 'Assigned', color: 'bg-blue-100 text-blue-700', darkColor: 'bg-blue-900/50 text-blue-300' },
+  assigned: { label: 'Assigned', color: 'bg-blue-100 text-blue-700', darkColor: 'bg-blue-500/20 text-blue-400' },
   'in-progress': { label: 'In Progress', color: 'bg-purple-100 text-purple-700', darkColor: 'bg-purple-900/50 text-purple-300' },
   resolved: { label: 'Resolved', color: 'bg-green-100 text-green-700', darkColor: 'bg-green-900/50 text-green-300' },
 };
@@ -120,9 +120,9 @@ export default function EngineerDashboard() {
     <div className="space-y-6">
       {/* Stats Summary */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className={`rounded-xl border p-4 ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
+        <div className={`rounded-xl border p-4 ${isDark ? 'bg-dark-card border-dark-border' : 'bg-white border-slate-200'}`}>
           <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isDark ? 'bg-blue-900/50' : 'bg-blue-100'}`}>
+            <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isDark ? 'bg-blue-500/20' : 'bg-blue-100'}`}>
               <Wrench className={`w-5 h-5 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
             </div>
             <div>
@@ -131,7 +131,7 @@ export default function EngineerDashboard() {
             </div>
           </div>
         </div>
-        <div className={`rounded-xl border p-4 ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
+        <div className={`rounded-xl border p-4 ${isDark ? 'bg-dark-card border-dark-border' : 'bg-white border-slate-200'}`}>
           <div className="flex items-center gap-3">
             <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isDark ? 'bg-green-900/50' : 'bg-green-100'}`}>
               <CheckCircle className={`w-5 h-5 ${isDark ? 'text-green-400' : 'text-green-600'}`} />
@@ -142,7 +142,7 @@ export default function EngineerDashboard() {
             </div>
           </div>
         </div>
-        <div className={`rounded-xl border p-4 ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
+        <div className={`rounded-xl border p-4 ${isDark ? 'bg-dark-card border-dark-border' : 'bg-white border-slate-200'}`}>
           <div className="flex items-center gap-3">
             <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isDark ? 'bg-orange-900/50' : 'bg-orange-100'}`}>
               <RefreshCw className={`w-5 h-5 ${isDark ? 'text-orange-400' : 'text-orange-600'}`} />
@@ -153,7 +153,7 @@ export default function EngineerDashboard() {
             </div>
           </div>
         </div>
-        <div className={`rounded-xl border p-4 ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
+        <div className={`rounded-xl border p-4 ${isDark ? 'bg-dark-card border-dark-border' : 'bg-white border-slate-200'}`}>
           <div className="flex items-center gap-3">
             <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isDark ? 'bg-purple-900/50' : 'bg-purple-100'}`}>
               <Clock className={`w-5 h-5 ${isDark ? 'text-purple-400' : 'text-purple-600'}`} />
@@ -167,12 +167,12 @@ export default function EngineerDashboard() {
       </div>
 
       {/* Toggle Tabs */}
-      <div className={`flex gap-2 p-1 rounded-lg ${isDark ? 'bg-slate-800' : 'bg-slate-100'}`}>
+      <div className={`flex gap-2 p-1 rounded-lg ${isDark ? 'bg-dark-card' : 'bg-slate-100'}`}>
         <button
           onClick={() => setShowHistory(false)}
           className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
             !showHistory
-              ? 'bg-blue-800 text-white'
+              ? 'bg-blue-800 dark:bg-blue-500 text-white'
               : isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-800'
           }`}
         >
@@ -182,7 +182,7 @@ export default function EngineerDashboard() {
           onClick={() => setShowHistory(true)}
           className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
             showHistory
-              ? 'bg-blue-800 text-white'
+              ? 'bg-blue-800 dark:bg-blue-500 text-white'
               : isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-800'
           }`}
         >
@@ -198,13 +198,13 @@ export default function EngineerDashboard() {
               <h2 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-slate-800'}`}>My Assigned Tickets</h2>
               <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Tickets requiring your attention</p>
             </div>
-            <span className={`px-3 py-1.5 text-sm font-medium rounded-lg ${isDark ? 'bg-blue-900/50 text-blue-300' : 'bg-blue-100 text-blue-700'}`}>
+            <span className={`px-3 py-1.5 text-sm font-medium rounded-lg ${isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-700'}`}>
               {myTickets.length} tickets
             </span>
           </div>
 
           {myTickets.length === 0 ? (
-            <div className={`rounded-xl border p-12 text-center ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
+            <div className={`rounded-xl border p-12 text-center ${isDark ? 'bg-dark-card border-dark-border' : 'bg-white border-slate-200'}`}>
               <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${isDark ? 'bg-green-900/30' : 'bg-green-100'}`}>
                 <CheckCircle className={`w-8 h-8 ${isDark ? 'text-green-400' : 'text-green-600'}`} />
               </div>
@@ -227,7 +227,7 @@ export default function EngineerDashboard() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className={`rounded-xl border overflow-hidden ticket-card shadow-sm ${
-                isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'
+                isDark ? 'bg-dark-card border-dark-border' : 'bg-white border-slate-200'
               }`}
             >
               {/* Reassign Request Banner */}
@@ -241,11 +241,11 @@ export default function EngineerDashboard() {
               {/* Card Header */}
               <div
                 onClick={() => setExpandedTicket(isExpanded ? null : ticket._id)}
-                className={`p-5 cursor-pointer transition-colors ${isDark ? 'hover:bg-slate-700/50' : 'hover:bg-slate-50'}`}
+                className={`p-5 cursor-pointer transition-colors ${isDark ? 'hover:bg-dark-hover' : 'hover:bg-slate-50'}`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-4">
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${isDark ? 'bg-blue-900/50' : 'bg-blue-100'}`}>
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${isDark ? 'bg-blue-500/20' : 'bg-blue-100'}`}>
                       <Wrench className={`w-6 h-6 ${isDark ? 'text-blue-400' : 'text-blue-800'}`} />
                     </div>
                     <div>
@@ -299,9 +299,9 @@ export default function EngineerDashboard() {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <div className={`border-t ${isDark ? 'border-slate-700' : 'border-slate-100'}`}>
+                    <div className={`border-t ${isDark ? 'border-dark-border' : 'border-slate-100'}`}>
                       {/* Ticket Details */}
-                      <div className={`p-5 grid grid-cols-2 md:grid-cols-4 gap-4 ${isDark ? 'bg-slate-700/30' : 'bg-slate-50'}`}>
+                      <div className={`p-5 grid grid-cols-2 md:grid-cols-4 gap-4 ${isDark ? 'bg-dark-elevated' : 'bg-slate-50'}`}>
                         <div>
                           <p className={`text-xs mb-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Call Type</p>
                           <p className={`text-sm font-medium ${isDark ? 'text-white' : 'text-slate-800'}`}>{ticket.callType}</p>
@@ -338,7 +338,7 @@ export default function EngineerDashboard() {
                         
                         {/* Request Reassign Button */}
                         {!hasReassignRequest && (
-                          <div className={`mt-4 pt-4 border-t ${isDark ? 'border-slate-700' : 'border-slate-200'}`}>
+                          <div className={`mt-4 pt-4 border-t ${isDark ? 'border-dark-border' : 'border-slate-200'}`}>
                             <button
                               onClick={() => setShowReassignModal(ticket._id)}
                               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
@@ -379,8 +379,8 @@ export default function EngineerDashboard() {
           </div>
 
           {ticketHistory.length === 0 ? (
-            <div className={`rounded-xl border p-12 text-center ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}>
-              <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${isDark ? 'bg-slate-700' : 'bg-slate-100'}`}>
+            <div className={`rounded-xl border p-12 text-center ${isDark ? 'bg-dark-card border-dark-border' : 'bg-white border-slate-200'}`}>
+              <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${isDark ? 'bg-dark-elevated' : 'bg-slate-100'}`}>
                 <Clock className={`w-8 h-8 ${isDark ? 'text-slate-400' : 'text-slate-400'}`} />
               </div>
               <h3 className={`font-semibold mb-2 ${isDark ? 'text-white' : 'text-slate-800'}`}>No History Yet</h3>
@@ -411,7 +411,7 @@ export default function EngineerDashboard() {
                     key={ticket._id}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className={`rounded-xl border overflow-hidden ${isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'}`}
+                    className={`rounded-xl border overflow-hidden ${isDark ? 'bg-dark-card border-dark-border' : 'bg-white border-slate-200'}`}
                   >
                     <div className="p-4">
                       <div className="flex items-start justify-between gap-4">
@@ -488,16 +488,16 @@ export default function EngineerDashboard() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             onClick={(e) => e.stopPropagation()}
-            className={`w-full max-w-md rounded-2xl shadow-2xl overflow-hidden ${isDark ? 'bg-slate-800' : 'bg-white'}`}
+            className={`w-full max-w-md rounded-2xl shadow-2xl overflow-hidden ${isDark ? 'bg-dark-card' : 'bg-white'}`}
           >
-            <div className={`flex items-center justify-between px-6 py-4 border-b ${isDark ? 'border-slate-700' : 'border-slate-100'}`}>
+            <div className={`flex items-center justify-between px-6 py-4 border-b ${isDark ? 'border-dark-border' : 'border-slate-100'}`}>
               <div>
                 <h2 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-slate-800'}`}>Request Reassignment</h2>
                 <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{showReassignModal}</p>
               </div>
               <button
                 onClick={() => setShowReassignModal(null)}
-                className={`p-2 rounded-lg transition-colors ${isDark ? 'hover:bg-slate-700' : 'hover:bg-slate-100'}`}
+                className={`p-2 rounded-lg transition-colors ${isDark ? 'hover:bg-dark-hover' : 'hover:bg-slate-100'}`}
               >
                 <X className={`w-5 h-5 ${isDark ? 'text-slate-400' : 'text-slate-500'}`} />
               </button>
@@ -514,7 +514,7 @@ export default function EngineerDashboard() {
                   rows={4}
                   className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-800/20 focus:border-blue-800 outline-none transition-all resize-none ${
                     isDark 
-                      ? 'bg-slate-700 border-slate-600 text-white placeholder-slate-400' 
+                      ? 'bg-dark-input border-dark-border text-white placeholder-slate-400' 
                       : 'bg-white border-slate-200 text-slate-800'
                   }`}
                 />
@@ -536,7 +536,7 @@ export default function EngineerDashboard() {
                   }}
                   className={`px-6 py-2.5 font-medium rounded-lg transition-colors ${
                     isDark 
-                      ? 'bg-slate-700 text-slate-300 hover:bg-slate-600' 
+                      ? 'bg-dark-elevated text-slate-300 hover:bg-dark-hover' 
                       : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                   }`}
                 >
