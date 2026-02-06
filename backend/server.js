@@ -25,12 +25,14 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const ticketRoutes = require('./routes/tickets');
 const notificationRoutes = require('./routes/notifications');
+const dutyRosterRoutes = require('./routes/dutyRoster');
 
 // Mount routers
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/tickets', ticketRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/duty-roster', dutyRosterRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

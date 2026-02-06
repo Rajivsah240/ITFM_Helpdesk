@@ -5,24 +5,27 @@ const User = require('../models/User');
 // @access  Public
 exports.register = async (req, res, next) => {
   try {
-    const { name, email, password, department, phone, role } = req.body;
+    const { name, email, password, department, designation, phone, role, employeeId, engineerType, location } = req.body;
 
     // Only allow 'user' or 'engineer' roles during registration (not admin)
     const allowedRoles = ['user', 'engineer'];
     const userRole = allowedRoles.includes(role) ? role : 'user';
 
-    // Generate employee ID
-    const employeeId = await User.generateEmployeeId();
+    // Use provided employeeId or generate one
+    const empId = employeeId || await User.generateEmployeeId();
 
     // Create user
     const user = await User.create({
-      employeeId,
+      employeeId: empId,
       name,
       email,
       password,
       department,
+      designation,
       phone,
-      role: userRole
+      role: userRole,
+      engineerType: userRole === 'engineer' ? engineerType : null,
+      location: userRole === 'engineer' ? location : null
     });
 
     sendTokenResponse(user, 201, res);

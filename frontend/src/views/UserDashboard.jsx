@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import StatusStepper from '../components/StatusStepper';
 import Chatbot from '../components/Chatbot';
+import RosterView from '../components/RosterView';
 import {
   Plus,
   Ticket,
@@ -402,6 +403,7 @@ export default function UserDashboard({ activeView }) {
         >
           {activeView === 'raise' && renderRaiseQuery()}
           {activeView === 'mytickets' && renderMyTickets()}
+          {activeView === 'view-roster' && <RosterView />}
         </motion.div>
       </AnimatePresence>
       

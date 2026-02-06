@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, User, AlertTriangle, AlertCircle, Info, Check } from 'lucide-react';
+import { X, User, AlertTriangle, AlertCircle, Info, Check, Clock, MapPin } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 export default function AssignModal({ ticket, engineers, onAssign, onClose, title = 'Assign Ticket' }) {
@@ -8,6 +8,11 @@ export default function AssignModal({ ticket, engineers, onAssign, onClose, titl
   const [severity, setSeverity] = useState(ticket.severity || '');
   const { isDark } = useTheme();
   const isReassign = title.toLowerCase().includes('reassign');
+
+  // Group engineers by availability
+  const onDutyEngineers = engineers.filter(e => e.availability?.isOnDuty);
+  const workingTodayEngineers = engineers.filter(e => e.availability?.isWorkingToday && !e.availability?.isOnDuty);
+  const otherEngineers = engineers.filter(e => !e.availability?.isWorkingToday);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -85,36 +90,67 @@ export default function AssignModal({ ticket, engineers, onAssign, onClose, titl
               <label className={`block text-sm font-medium mb-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
                 {isReassign ? 'Reassign to Engineer *' : 'Assign to Engineer *'}
               </label>
-              <div className="space-y-2">
-                {engineers.map((engineer) => (
-                  <label
-                    key={engineer._id}
-                    className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-all ${
-                      selectedEngineer === engineer._id
-                        ? isDark ? 'border-blue-500 bg-blue-500/20' : 'border-blue-500 bg-blue-50'
-                        : isDark ? 'border-dark-border hover:border-dark-hover' : 'border-slate-200 hover:border-slate-300'
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="engineer"
-                      value={engineer._id}
-                      checked={selectedEngineer === engineer._id}
-                      onChange={(e) => setSelectedEngineer(e.target.value)}
-                      className="sr-only"
-                    />
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isDark ? 'bg-blue-500/20' : 'bg-blue-100'}`}>
-                      <User className={`w-5 h-5 ${isDark ? 'text-blue-400' : 'text-blue-500'}`} />
+              <div className="space-y-3 max-h-80 overflow-y-auto pr-1">
+                {/* On Duty Engineers */}
+                {onDutyEngineers.length > 0 && (
+                  <div className="space-y-2">
+                    <div className={`flex items-center gap-2 px-2 py-1 text-xs font-medium ${isDark ? 'text-green-400' : 'text-green-600'}`}>
+                      <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                      Currently On Duty
                     </div>
-                    <div className="flex-1">
-                      <p className={`font-medium ${isDark ? 'text-white' : 'text-slate-800'}`}>{engineer.name}</p>
-                      <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{engineer.department}</p>
+                    {onDutyEngineers.map((engineer) => (
+                      <EngineerOption 
+                        key={engineer._id} 
+                        engineer={engineer} 
+                        selected={selectedEngineer === engineer._id}
+                        onSelect={setSelectedEngineer}
+                        isDark={isDark}
+                        status="on-duty"
+                      />
+                    ))}
+                  </div>
+                )}
+
+                {/* Working Today but not on duty */}
+                {workingTodayEngineers.length > 0 && (
+                  <div className="space-y-2">
+                    <div className={`flex items-center gap-2 px-2 py-1 text-xs font-medium ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
+                      <Clock className="w-3 h-3" />
+                      Working Today (Different Shift)
                     </div>
-                    {selectedEngineer === engineer._id && (
-                      <Check className={`w-5 h-5 ${isDark ? 'text-blue-400' : 'text-blue-500'}`} />
+                    {workingTodayEngineers.map((engineer) => (
+                      <EngineerOption 
+                        key={engineer._id} 
+                        engineer={engineer} 
+                        selected={selectedEngineer === engineer._id}
+                        onSelect={setSelectedEngineer}
+                        isDark={isDark}
+                        status="working-today"
+                      />
+                    ))}
+                  </div>
+                )}
+
+                {/* Other Engineers */}
+                {otherEngineers.length > 0 && (
+                  <div className="space-y-2">
+                    {(onDutyEngineers.length > 0 || workingTodayEngineers.length > 0) && (
+                      <div className={`flex items-center gap-2 px-2 py-1 text-xs font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                        Other Engineers
+                      </div>
                     )}
-                  </label>
-                ))}
+                    {otherEngineers.map((engineer) => (
+                      <EngineerOption 
+                        key={engineer._id} 
+                        engineer={engineer} 
+                        selected={selectedEngineer === engineer._id}
+                        onSelect={setSelectedEngineer}
+                        isDark={isDark}
+                        status="other"
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -186,5 +222,100 @@ export default function AssignModal({ ticket, engineers, onAssign, onClose, titl
         </motion.div>
       </motion.div>
     </AnimatePresence>
+  );
+}
+
+// Engineer Option Component
+function EngineerOption({ engineer, selected, onSelect, isDark, status }) {
+  const availability = engineer.availability;
+  
+  const getStatusBadge = () => {
+    if (status === 'on-duty') {
+      return (
+        <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${
+          isDark ? 'bg-green-500/20 text-green-400' : 'bg-green-100 text-green-700'
+        }`}>
+          On Duty
+        </span>
+      );
+    }
+    if (status === 'working-today') {
+      return (
+        <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${
+          isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-700'
+        }`}>
+          {availability?.shiftName}
+        </span>
+      );
+    }
+    if (availability?.shiftType === 'WO' || availability?.shiftType === 'LV' || availability?.shiftType === 'H') {
+      return (
+        <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${
+          isDark ? 'bg-red-500/20 text-red-400' : 'bg-red-100 text-red-700'
+        }`}>
+          {availability?.shiftName}
+        </span>
+      );
+    }
+    return null;
+  };
+
+  return (
+    <label
+      className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-all ${
+        selected
+          ? isDark ? 'border-blue-500 bg-blue-500/20' : 'border-blue-500 bg-blue-50'
+          : status === 'on-duty'
+            ? isDark ? 'border-green-700/50 bg-green-900/10 hover:border-green-600' : 'border-green-200 bg-green-50/50 hover:border-green-300'
+            : isDark ? 'border-dark-border hover:border-dark-hover' : 'border-slate-200 hover:border-slate-300'
+      }`}
+    >
+      <input
+        type="radio"
+        name="engineer"
+        value={engineer._id}
+        checked={selected}
+        onChange={(e) => onSelect(e.target.value)}
+        className="sr-only"
+      />
+      <div className={`relative w-10 h-10 rounded-full flex items-center justify-center ${
+        status === 'on-duty'
+          ? isDark ? 'bg-green-500/20' : 'bg-green-100'
+          : isDark ? 'bg-blue-500/20' : 'bg-blue-100'
+      }`}>
+        <User className={`w-5 h-5 ${
+          status === 'on-duty'
+            ? isDark ? 'text-green-400' : 'text-green-600'
+            : isDark ? 'text-blue-400' : 'text-blue-500'
+        }`} />
+        {status === 'on-duty' && (
+          <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-green-500 border-2 border-white dark:border-dark-card" />
+        )}
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 flex-wrap">
+          <p className={`font-medium ${isDark ? 'text-white' : 'text-slate-800'}`}>{engineer.name}</p>
+          {getStatusBadge()}
+        </div>
+        <div className="flex items-center gap-3 mt-0.5">
+          <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{engineer.department}</p>
+          {availability?.shiftTiming && status !== 'other' && (
+            <span className={`text-xs flex items-center gap-1 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+              <Clock className="w-3 h-3" />
+              {availability.shiftTiming}
+            </span>
+          )}
+          {availability?.location && (
+            <span className={`text-xs flex items-center gap-1 ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+              <MapPin className="w-3 h-3" />
+              {availability.location}
+            </span>
+          )}
+        </div>
+      </div>
+      {selected && (
+        <Check className={`w-5 h-5 shrink-0 ${isDark ? 'text-blue-400' : 'text-blue-500'}`} />
+      )}
+    </label>
   );
 }

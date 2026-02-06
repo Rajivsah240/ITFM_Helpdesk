@@ -13,6 +13,9 @@ import {
   Building2,
   ChevronRight,
   RefreshCw,
+  Calendar,
+  CalendarDays,
+  Trash2,
 } from 'lucide-react';
 
 const menuItems = {
@@ -22,13 +25,18 @@ const menuItems = {
     { id: 'active', label: 'Active Issues', icon: ClipboardList },
     { id: 'workload', label: 'Engineer Workload', icon: Users },
     { id: 'reassignments', label: 'Reassign Requests', icon: RefreshCw },
+    { id: 'deletion-requests', label: 'Deletion Requests', icon: Trash2 },
+    { id: 'manage-roster', label: 'Manage Roster', icon: Calendar },
+    { id: 'view-roster', label: 'View Roster', icon: CalendarDays },
   ],
   engineer: [
     { id: 'assigned', label: 'Assigned to Me', icon: ClipboardList },
+    { id: 'view-roster', label: 'View Roster', icon: CalendarDays },
   ],
   user: [
     { id: 'raise', label: 'Raise Query', icon: Plus },
     { id: 'mytickets', label: 'My Tickets', icon: Ticket },
+    { id: 'view-roster', label: 'View Roster', icon: CalendarDays },
   ],
 };
 

@@ -5,6 +5,9 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import TicketTable from '../components/TicketTable';
 import AssignModal from '../components/AssignModal';
+import RosterManagement from '../components/RosterManagement';
+import RosterView from '../components/RosterView';
+import DeletionRequests from '../components/DeletionRequests';
 import {
   Ticket,
   AlertTriangle,
@@ -27,11 +30,13 @@ export default function AdminDashboard({ activeView }) {
     getReassignRequests, 
     handleReassign 
   } = useTickets();
-  const { getEngineers, getWorkload, engineers } = useAuth();
+  const { getEngineersWithAvailability, getWorkload, engineers } = useAuth();
   const { isDark } = useTheme();
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [reassignTicket, setReassignTicket] = useState(null);
   const [workload, setWorkload] = useState([]);
+  const [selectedRosterForView, setSelectedRosterForView] = useState(null);
+  const [hasRoster, setHasRoster] = useState(false);
 
   useEffect(() => {
     fetchTickets();
@@ -47,7 +52,8 @@ export default function AdminDashboard({ activeView }) {
   }, [activeView]);
 
   const loadEngineers = async () => {
-    await getEngineers();
+    const result = await getEngineersWithAvailability();
+    setHasRoster(result.hasRoster);
   };
 
   const loadWorkload = async () => {
@@ -421,6 +427,18 @@ export default function AdminDashboard({ activeView }) {
           {activeView === 'active' && renderActive()}
           {activeView === 'workload' && renderWorkload()}
           {activeView === 'reassignments' && renderReassignments()}
+          {activeView === 'manage-roster' && (
+            <RosterManagement 
+              onViewRoster={(roster) => setSelectedRosterForView(roster)} 
+            />
+          )}
+          {activeView === 'view-roster' && (
+            <RosterView 
+              selectedRoster={selectedRosterForView}
+              onBack={() => setSelectedRosterForView(null)}
+            />
+          )}
+          {activeView === 'deletion-requests' && <DeletionRequests />}
         </motion.div>
       </AnimatePresence>
 

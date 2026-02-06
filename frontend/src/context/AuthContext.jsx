@@ -121,6 +121,20 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const getEngineersWithAvailability = async () => {
+    try {
+      const response = await userService.getEngineersWithAvailability();
+      if (response.success) {
+        setEngineers(response.data);
+        return { engineers: response.data, hasRoster: response.hasRoster };
+      }
+      return { engineers: [], hasRoster: false };
+    } catch (error) {
+      console.error('Error fetching engineers with availability:', error);
+      return { engineers: [], hasRoster: false };
+    }
+  };
+
   const getWorkload = async () => {
     try {
       const response = await userService.getWorkload();
@@ -142,6 +156,7 @@ export function AuthProvider({ children }) {
         updateProfile,
         changePassword,
         getEngineers,
+        getEngineersWithAvailability,
         getWorkload,
         engineers
       }}

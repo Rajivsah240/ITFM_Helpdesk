@@ -4,6 +4,7 @@ import { useTickets } from '../context/TicketContext';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import ActionLogger from '../components/ActionLogger';
+import RosterView from '../components/RosterView';
 import {
   ChevronDown,
   ChevronUp,
@@ -33,7 +34,7 @@ const statusConfig = {
   resolved: { label: 'Resolved', color: 'bg-green-100 text-green-700', darkColor: 'bg-green-900/50 text-green-300' },
 };
 
-export default function EngineerDashboard() {
+export default function EngineerDashboard({ activeView = 'assigned' }) {
   const { tickets, loading, fetchTickets, getTicketsByEngineer, getEngineerTicketHistory, addActionLog, resolveTicket, requestReassign } = useTickets();
   const { user } = useAuth();
   const { isDark } = useTheme();
@@ -45,6 +46,11 @@ export default function EngineerDashboard() {
   useEffect(() => {
     fetchTickets();
   }, []);
+
+  // Show roster view if active
+  if (activeView === 'view-roster') {
+    return <RosterView />;
+  }
 
   const myTickets = getTicketsByEngineer(user?.id || user?._id);
   const ticketHistory = getEngineerTicketHistory(user?.id || user?._id);

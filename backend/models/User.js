@@ -41,13 +41,42 @@ const UserSchema = new mongoose.Schema({
     required: [true, 'Please add a department'],
     trim: true
   },
+  designation: {
+    type: String,
+    required: [true, 'Please add a designation'],
+    trim: true
+  },
+  engineerType: {
+    type: String,
+    enum: ['ITFM Engineer', 'Software Developer', null],
+    default: null
+  },
+  location: {
+    type: String,
+    trim: true,
+    enum: ['Numaligarh', 'NRL-Siliguri', 'NRL Ghy-Co.', 'NRL-Delhi', 'NRL-Paradip', 'Delhi Office', null],
+    default: null
+  },
   phone: {
     type: String,
+    required: [true, 'Please add a phone number'],
     trim: true
   },
   isActive: {
     type: Boolean,
     default: true
+  },
+  deletionRequested: {
+    type: Boolean,
+    default: false
+  },
+  deletionRequestDate: {
+    type: Date,
+    default: null
+  },
+  deletionReason: {
+    type: String,
+    default: null
   },
   createdAt: {
     type: Date,

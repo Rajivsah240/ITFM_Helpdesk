@@ -4,10 +4,18 @@ const {
   getUsers,
   getUser,
   getEngineers,
+  getEngineersWithAvailability,
   createUser,
   updateUser,
   deleteUser,
-  getWorkload
+  getWorkload,
+  getProfile,
+  updateProfile,
+  requestDeletion,
+  cancelDeletionRequest,
+  getDeletionRequests,
+  approveDeletion,
+  rejectDeletion
 } = require('../controllers/userController');
 const { protect, authorize } = require('../middleware/auth');
 
@@ -29,9 +37,21 @@ const createUserValidation = [
   body('department').trim().notEmpty().withMessage('Department is required')
 ];
 
+// Profile routes (accessible by all authenticated users)
+router.get('/profile', getProfile);
+router.put('/profile', updateProfile);
+router.post('/deletion-request', requestDeletion);
+router.delete('/deletion-request', cancelDeletionRequest);
+
 // Engineer routes (accessible by admin)
 router.get('/engineers', authorize('admin'), getEngineers);
+router.get('/engineers/availability', authorize('admin'), getEngineersWithAvailability);
 router.get('/workload', authorize('admin'), getWorkload);
+
+// Deletion request management (admin only)
+router.get('/deletion-requests', authorize('admin'), getDeletionRequests);
+router.post('/:id/approve-deletion', authorize('admin'), approveDeletion);
+router.post('/:id/reject-deletion', authorize('admin'), rejectDeletion);
 
 // User management routes (admin only)
 router.route('/')

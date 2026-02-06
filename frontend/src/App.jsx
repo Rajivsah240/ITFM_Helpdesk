@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { TicketProvider, useTickets } from './context/TicketContext';
@@ -7,18 +7,33 @@ import { ThemeProvider, useTheme } from './context/ThemeContext';
 import AuthWrapper from './components/AuthWrapper';
 import Sidebar from './components/Sidebar';
 import NotificationPanel from './components/NotificationPanel';
+import ProfileView from './components/ProfileView';
 import AdminDashboard from './views/AdminDashboard';
 import EngineerDashboard from './views/EngineerDashboard';
 import UserDashboard from './views/UserDashboard';
-import { Bell, Search, Sun, Moon } from 'lucide-react';
+import { Bell, Search, Sun, Moon, User, LogOut, ChevronDown } from 'lucide-react';
 
 function Dashboard() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const { getUnreadCount } = useTickets();
   const { isDark, toggleTheme } = useTheme();
   const [activeView, setActiveView] = useState('');
   const [showNotifications, setShowNotifications] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+  const profileMenuRef = useRef(null);
+
+  // Close profile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
+        setShowProfileMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Set default view based on role
   useEffect(() => {
@@ -127,20 +142,89 @@ function Dashboard() {
                 </div>
               )}
               
-              {/* User Avatar */}
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isDark ? 'bg-blue-500' : 'bg-blue-500'}`}>
-                <span className="text-white font-semibold text-sm">
-                  {user.name.split(' ').map((n) => n[0]).join('')}
-                </span>
+              {/* User Avatar with Dropdown */}
+              <div className="relative" ref={profileMenuRef}>
+                <button
+                  onClick={() => setShowProfileMenu(!showProfileMenu)}
+                  className={`flex items-center gap-2 p-1 pr-2 rounded-lg transition-colors ${
+                    isDark ? 'hover:bg-dark-hover' : 'hover:bg-slate-100'
+                  }`}
+                >
+                  <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center">
+                    <span className="text-white font-semibold text-sm">
+                      {user.name.split(' ').map((n) => n[0]).join('')}
+                    </span>
+                  </div>
+                  <ChevronDown className={`w-4 h-4 transition-transform ${showProfileMenu ? 'rotate-180' : ''} ${isDark ? 'text-slate-400' : 'text-slate-500'}`} />
+                </button>
+
+                {/* Profile Dropdown Menu */}
+                <AnimatePresence>
+                  {showProfileMenu && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className={`absolute right-0 mt-2 w-56 rounded-xl shadow-lg border overflow-hidden z-50 ${
+                        isDark ? 'bg-dark-card border-dark-border' : 'bg-white border-slate-200'
+                      }`}
+                    >
+                      {/* User Info */}
+                      <div className={`px-4 py-3 border-b ${isDark ? 'border-dark-border' : 'border-slate-100'}`}>
+                        <p className={`font-medium ${isDark ? 'text-white' : 'text-slate-800'}`}>
+                          {user.name}
+                        </p>
+                        <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                          {user.email}
+                        </p>
+                      </div>
+
+                      {/* Menu Items */}
+                      <div className="py-1">
+                        <button
+                          onClick={() => {
+                            setShowProfileMenu(false);
+                            setShowProfile(true);
+                          }}
+                          className={`w-full flex items-center gap-3 px-4 py-2 text-sm transition-colors ${
+                            isDark ? 'text-slate-300 hover:bg-dark-hover' : 'text-slate-700 hover:bg-slate-50'
+                          }`}
+                        >
+                          <User className="w-4 h-4" />
+                          View Profile
+                        </button>
+                        <button
+                          onClick={() => {
+                            setShowProfileMenu(false);
+                            logout();
+                          }}
+                          className={`w-full flex items-center gap-3 px-4 py-2 text-sm transition-colors text-red-500 ${
+                            isDark ? 'hover:bg-dark-hover' : 'hover:bg-red-50'
+                          }`}
+                        >
+                          <LogOut className="w-4 h-4" />
+                          Sign Out
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
           </div>
         </header>
 
+        {/* Profile Modal */}
+        <AnimatePresence>
+          {showProfile && (
+            <ProfileView onClose={() => setShowProfile(false)} />
+          )}
+        </AnimatePresence>
+
         {/* Main Content */}
         <main className={`flex-1 p-6 overflow-auto ${isDark ? 'bg-dark-bg' : 'bg-slate-50'}`}>
           {user.role === 'admin' && <AdminDashboard activeView={activeView} />}
-          {user.role === 'engineer' && <EngineerDashboard />}
+          {user.role === 'engineer' && <EngineerDashboard activeView={activeView} />}
           {user.role === 'user' && <UserDashboard activeView={activeView} />}
         </main>
       </div>

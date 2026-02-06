@@ -12,6 +12,9 @@ import {
   AlertCircle,
   Mail,
   Phone,
+  MapPin,
+  Briefcase,
+  Hash,
 } from 'lucide-react';
 
 export default function AuthWrapper({ children }) {
@@ -22,8 +25,12 @@ export default function AuthWrapper({ children }) {
     email: '',
     password: '',
     name: '',
+    employeeCode: '',
     department: '',
+    designation: '',
     phone: '',
+    location: '',
+    engineerType: '',
     role: 'user',
   });
   const [error, setError] = useState('');
@@ -54,17 +61,37 @@ export default function AuthWrapper({ children }) {
           toast.success('Login successful! Redirecting...');
         }
       } else {
-        if (!formData.name || !formData.email || !formData.password || !formData.department || !formData.role) {
-          setError('Name, email, password, department, and role are required');
+        // Validation for registration
+        if (!formData.name || !formData.email || !formData.password || !formData.department || !formData.role || !formData.employeeCode || !formData.designation || !formData.phone) {
+          setError('All fields marked with * are required');
           setIsSubmitting(false);
           return;
         }
+        
+        // Additional validation for engineers
+        if (formData.role === 'engineer') {
+          if (!formData.location) {
+            setError('Location is required for engineers');
+            setIsSubmitting(false);
+            return;
+          }
+          if (!formData.engineerType) {
+            setError('Please select engineer type (ITFM Engineer or Software Developer)');
+            setIsSubmitting(false);
+            return;
+          }
+        }
+        
         const result = await register({
           name: formData.name,
           email: formData.email,
           password: formData.password,
+          employeeId: formData.employeeCode,
           department: formData.department,
+          designation: formData.designation,
           phone: formData.phone,
+          location: formData.role === 'engineer' ? formData.location : null,
+          engineerType: formData.role === 'engineer' ? formData.engineerType : null,
           role: formData.role,
         });
         if (!result.success) {
@@ -159,7 +186,7 @@ export default function AuthWrapper({ children }) {
                   {/* Name Field */}
                   <div>
                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                      Full Name
+                      Full Name *
                     </label>
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -174,10 +201,28 @@ className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-dark-bor
                     </div>
                   </div>
 
+                  {/* Employee Code Field */}
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                      Employee Code *
+                    </label>
+                    <div className="relative">
+                      <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                      <input
+                        type="text"
+                        name="employeeCode"
+                        value={formData.employeeCode}
+                        onChange={handleChange}
+                        placeholder="EMP001"
+className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-500/30 focus:border-blue-500 outline-none transition-all bg-white dark:bg-dark-input dark:text-white"
+                      />
+                    </div>
+                  </div>
+
                   {/* Department Field */}
                   <div>
                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                      Department
+                      Department *
                     </label>
                     <div className="relative">
                       <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -192,10 +237,28 @@ className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-dark-bor
                     </div>
                   </div>
 
+                  {/* Designation Field */}
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                      Designation *
+                    </label>
+                    <div className="relative">
+                      <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                      <input
+                        type="text"
+                        name="designation"
+                        value={formData.designation}
+                        onChange={handleChange}
+                        placeholder="Senior Engineer"
+className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-500/30 focus:border-blue-500 outline-none transition-all bg-white dark:bg-dark-input dark:text-white"
+                      />
+                    </div>
+                  </div>
+
                   {/* Phone Field */}
                   <div>
                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                      Phone (Optional)
+                      Phone Number *
                     </label>
                     <div className="relative">
                       <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -204,7 +267,7 @@ className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-dark-bor
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        placeholder="+1234567890"
+                        placeholder="+91 9876543210"
 className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-500/30 focus:border-blue-500 outline-none transition-all bg-white dark:bg-dark-input dark:text-white"
                       />
                     </div>
@@ -213,12 +276,12 @@ className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-dark-bor
                   {/* Role Selection */}
                   <div>
                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                      Register as
+                      Register as *
                     </label>
                     <div className="grid grid-cols-2 gap-3">
                       <button
                         type="button"
-                        onClick={() => setFormData({ ...formData, role: 'user' })}
+                        onClick={() => setFormData({ ...formData, role: 'user', engineerType: '', location: '' })}
                         className={`flex items-center justify-center gap-2 p-3 rounded-lg border-2 transition-all ${
                           formData.role === 'user'
                             ? 'border-blue-500 bg-blue-50 dark:bg-blue-500/20 text-blue-500'
@@ -242,6 +305,66 @@ className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-dark-bor
                       </button>
                     </div>
                   </div>
+
+                  {/* Engineer-specific fields */}
+                  {formData.role === 'engineer' && (
+                    <>
+                      {/* Engineer Type Selection */}
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                          Engineer Type *
+                        </label>
+                        <div className="grid grid-cols-2 gap-3">
+                          <button
+                            type="button"
+                            onClick={() => setFormData({ ...formData, engineerType: 'ITFM Engineer' })}
+                            className={`flex items-center justify-center gap-2 p-2.5 rounded-lg border-2 transition-all text-sm ${
+                              formData.engineerType === 'ITFM Engineer'
+                                ? 'border-green-500 bg-green-50 dark:bg-green-500/20 text-green-600 dark:text-green-400'
+                                : 'border-slate-200 dark:border-dark-border hover:border-slate-300 dark:hover:border-dark-hover text-slate-600 dark:text-slate-400'
+                            }`}
+                          >
+                            <span className="font-medium">ITFM Engineer</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setFormData({ ...formData, engineerType: 'Software Developer' })}
+                            className={`flex items-center justify-center gap-2 p-2.5 rounded-lg border-2 transition-all text-sm ${
+                              formData.engineerType === 'Software Developer'
+                                ? 'border-purple-500 bg-purple-50 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400'
+                                : 'border-slate-200 dark:border-dark-border hover:border-slate-300 dark:hover:border-dark-hover text-slate-600 dark:text-slate-400'
+                            }`}
+                          >
+                            <span className="font-medium">Software Developer</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Location Field for Engineers */}
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                          Work Location *
+                        </label>
+                        <div className="relative">
+                          <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                          <select
+                            name="location"
+                            value={formData.location}
+                            onChange={handleChange}
+className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-500/30 focus:border-blue-500 outline-none transition-all bg-white dark:bg-dark-input dark:text-white appearance-none"
+                          >
+                            <option value="">Select Location</option>
+                            <option value="Numaligarh">Numaligarh</option>
+                            <option value="NRL-Siliguri">NRL-Siliguri</option>
+                            <option value="NRL Ghy-Co.">NRL Ghy-Co.</option>
+                            <option value="NRL-Delhi">NRL-Delhi</option>
+                            <option value="NRL-Paradip">NRL-Paradip</option>
+                            <option value="Delhi Office">Delhi Office</option>
+                          </select>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>
