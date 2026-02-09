@@ -1,6 +1,24 @@
 const DutyRoster = require('../models/DutyRoster');
 const { SHIFT_TYPES } = require('../models/DutyRoster');
 
+const parseLocalDate = (value) => {
+  if (!value) return null;
+  if (value instanceof Date) return value;
+  const dateString = String(value);
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+    const [year, month, day] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  }
+  return new Date(value);
+};
+
+const normalizeDayStart = (value) => {
+  const date = parseLocalDate(value);
+  if (!date) return null;
+  date.setHours(0, 0, 0, 0);
+  return date;
+};
+
 // @desc    Get all duty rosters
 // @route   GET /api/duty-roster
 // @access  Private (Admin, Engineer)
@@ -68,11 +86,13 @@ exports.getRosterById = async (req, res) => {
 // @access  Private
 exports.getRosterByWeek = async (req, res) => {
   try {
-    const date = new Date(req.params.date);
+    const startOfDay = normalizeDayStart(req.params.date);
+    const endOfDay = new Date(startOfDay);
+    endOfDay.setHours(23, 59, 59, 999);
     
     const roster = await DutyRoster.findOne({
-      weekStartDate: { $lte: date },
-      weekEndDate: { $gte: date },
+      weekStartDate: { $lte: endOfDay },
+      weekEndDate: { $gte: startOfDay },
       status: 'published'
     })
       .populate('createdBy', 'name email')
@@ -94,11 +114,12 @@ exports.getRosterByWeek = async (req, res) => {
 // @access  Private
 exports.getCurrentRoster = async (req, res) => {
   try {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const today = normalizeDayStart(new Date());
+    const endOfDay = new Date(today);
+    endOfDay.setHours(23, 59, 59, 999);
     
     const roster = await DutyRoster.findOne({
-      weekStartDate: { $lte: today },
+      weekStartDate: { $lte: endOfDay },
       weekEndDate: { $gte: today },
       status: 'published'
     })
@@ -124,8 +145,8 @@ exports.createRoster = async (req, res) => {
     const { weekStartDate, weekEndDate, title, engineers, status } = req.body;
     
     // Validate dates
-    const start = new Date(weekStartDate);
-    const end = new Date(weekEndDate);
+    const start = normalizeDayStart(weekStartDate);
+    const end = normalizeDayStart(weekEndDate);
     
     if (end <= start) {
       return res.status(400).json({ message: 'End date must be after start date' });
@@ -183,8 +204,8 @@ exports.updateRoster = async (req, res) => {
     }
     
     // Update fields
-    if (weekStartDate) roster.weekStartDate = new Date(weekStartDate);
-    if (weekEndDate) roster.weekEndDate = new Date(weekEndDate);
+    if (weekStartDate) roster.weekStartDate = normalizeDayStart(weekStartDate);
+    if (weekEndDate) roster.weekEndDate = normalizeDayStart(weekEndDate);
     if (title) roster.title = title;
     if (engineers) roster.engineers = engineers;
     if (status) roster.status = status;
@@ -386,8 +407,10 @@ exports.cloneRoster = async (req, res) => {
       return res.status(404).json({ message: 'Source roster not found' });
     }
     
-    const start = new Date(newStartDate);
-    const daysDiff = (sourceRoster.weekEndDate - sourceRoster.weekStartDate) / (1000 * 60 * 60 * 24);
+    const start = normalizeDayStart(newStartDate);
+    const sourceStart = normalizeDayStart(sourceRoster.weekStartDate);
+    const sourceEnd = normalizeDayStart(sourceRoster.weekEndDate);
+    const daysDiff = Math.round((sourceEnd - sourceStart) / (1000 * 60 * 60 * 24));
     const end = new Date(start);
     end.setDate(end.getDate() + daysDiff);
     
@@ -401,7 +424,7 @@ exports.cloneRoster = async (req, res) => {
       contactNo: eng.contactNo,
       shifts: eng.shifts.map(shift => {
         const originalDayOffset = Math.floor(
-          (new Date(shift.date) - sourceRoster.weekStartDate) / (1000 * 60 * 60 * 24)
+          (new Date(shift.date) - sourceStart) / (1000 * 60 * 60 * 24)
         );
         const newDate = new Date(start);
         newDate.setDate(newDate.getDate() + originalDayOffset);
