@@ -152,7 +152,7 @@ export default function UserDashboard({ activeView }) {
                 name="assetId"
                 value={formData.assetId}
                 onChange={handleChange}
-                placeholder="e.g., ASSET-PC-101"
+                placeholder="e.g., 600XXXXX"
                 className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-500/30 focus:border-blue-500 dark:focus:border-blue-500 outline-none transition-all ${
                   isDark ? 'bg-dark-input border-dark-border text-white placeholder-slate-400' : 'bg-white border-slate-200 text-slate-800'
                 }`}
@@ -197,7 +197,7 @@ export default function UserDashboard({ activeView }) {
                 name="location"
                 value={formData.location}
                 onChange={handleChange}
-                placeholder="e.g., Building A, Floor 2, Room 201"
+                placeholder="e.g., Annex zvuilding"
                 className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500/20 dark:focus:ring-blue-500/30 focus:border-blue-500 dark:focus:border-blue-500 outline-none transition-all ${
                   isDark ? 'bg-dark-input border-dark-border text-white placeholder-slate-400' : 'bg-white border-slate-200 text-slate-800'
                 }`}
