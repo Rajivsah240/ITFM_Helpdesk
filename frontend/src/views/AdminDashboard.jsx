@@ -151,7 +151,14 @@ export default function AdminDashboard({ activeView }) {
                     <Ticket className={`w-5 h-5 ${isDark ? 'text-red-400' : 'text-red-600'}`} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className={`font-medium ${isDark ? 'text-white' : 'text-slate-800'}`}>{ticket.ticketId}</p>
+                    <div className="flex items-center gap-2">
+                      <p className={`font-medium ${isDark ? 'text-white' : 'text-slate-800'}`}>{ticket.ticketId}</p>
+                      {ticket.raisedBy?.name && (
+                        <span className={`text-xs ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+                          by {ticket.raisedBy.name}
+                        </span>
+                      )}
+                    </div>
                     <p className={`text-sm truncate ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{ticket.problemDescription}</p>
                   </div>
                   <button className="px-3 py-1.5 bg-blue-500 dark:bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 dark:hover:bg-blue-600 transition-colors">
@@ -219,6 +226,7 @@ export default function AdminDashboard({ activeView }) {
         tickets={unassigned}
         onRowClick={(ticket) => setSelectedTicket(ticket)}
         showAssignee={false}
+        showRaisedBy={true}
       />
     </div>
   );
@@ -234,7 +242,7 @@ export default function AdminDashboard({ activeView }) {
           {active.length} tickets
         </span>
       </div>
-      <TicketTable tickets={active} />
+      <TicketTable tickets={active} showRaisedBy={true} />
     </div>
   );
 
@@ -335,7 +343,21 @@ export default function AdminDashboard({ activeView }) {
               
               {/* Request Details */}
               <div className={`p-5 ${isDark ? 'bg-dark-elevated' : 'bg-slate-50'}`}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                  <div>
+                    <p className={`text-xs mb-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Raised By</p>
+                    <div className="flex items-center gap-2">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isDark ? 'bg-purple-500/20' : 'bg-purple-100'}`}>
+                        <User className={`w-4 h-4 ${isDark ? 'text-purple-400' : 'text-purple-500'}`} />
+                      </div>
+                      <div>
+                        <span className={`font-medium ${isDark ? 'text-white' : 'text-slate-800'}`}>{ticket.raisedBy?.name || 'Unknown'}</span>
+                        {ticket.raisedBy?.department && (
+                          <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{ticket.raisedBy.department}</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                   <div>
                     <p className={`text-xs mb-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Current Engineer</p>
                     <div className="flex items-center gap-2">

@@ -8,9 +8,10 @@ import {
   Monitor,
   Clock,
   User,
+  UserCircle,
 } from 'lucide-react';
 
-export default function TicketTable({ tickets, onRowClick, showAssignee = true }) {
+export default function TicketTable({ tickets, onRowClick, showAssignee = true, showRaisedBy = false }) {
   const { isDark } = useTheme();
   
   const severityConfig = {
@@ -74,6 +75,11 @@ export default function TicketTable({ tickets, onRowClick, showAssignee = true }
               <th className={`px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                 Location
               </th>
+              {showRaisedBy && (
+                <th className={`px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                  Raised By
+                </th>
+              )}
               <th className={`px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                 Status
               </th>
@@ -132,6 +138,23 @@ export default function TicketTable({ tickets, onRowClick, showAssignee = true }
                       <span className={`text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>{ticket.location}</span>
                     </div>
                   </td>
+                  {showRaisedBy && (
+                    <td className="px-4 py-4">
+                      {ticket.raisedBy?.name ? (
+                        <div className="flex items-center gap-2">
+                          <UserCircle className={`w-4 h-4 ${isDark ? 'text-slate-500' : 'text-slate-400'}`} />
+                          <div>
+                            <span className={`text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>{ticket.raisedBy.name}</span>
+                            {ticket.raisedBy.department && (
+                              <p className={`text-xs ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>{ticket.raisedBy.department}</p>
+                            )}
+                          </div>
+                        </div>
+                      ) : (
+                        <span className={`text-sm ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>Unknown</span>
+                      )}
+                    </td>
+                  )}
                   <td className="px-4 py-4">
                     <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${status.color}`}>
                       {status.label}
